@@ -22,8 +22,47 @@ Liste de fonctions à implémenter :
 
 (compléter avec les TODOs du code de Brandon)
 
+On part sur de la BDD SQLlite
+
+A la fin d'une manche on enregistre les stats
+- l'user
+- le niveau
+- son nombre de tentative
+- son gain
+- le résultat
+
+User <--> Statistique : relation one to one
+
+`User.py` contient déjà un constructeur depuis lequel on peut
+affecter des valeurs provenant de la BDD
+
+# MVC : option
+
+Model User
+- les propriétés de l'user seront = aux champs de la BDD
 
 
+UserController :
+- insertUser()
+- getUser()
+
+# groupes
+
+1 groupe de 3
+A :
+- Mouhamadou
+- Wissem
+- Vittorio
+
+2 groupe de 2
+
+B :
+- Sébastien
+- Narcisse
+
+C :
+- Brandon
+- Raïd
 
 
 
