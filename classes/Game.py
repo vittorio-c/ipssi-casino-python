@@ -1,6 +1,7 @@
 from .Scenario import Scenario
 from .ConfigurationLevel import ConfigurationLevel
 from .User import User
+from .Service import Service
 
 class Game :
     """ Contient la logique du JEU """
@@ -63,9 +64,31 @@ class Game :
         #TODO: Check le nombre
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
+        while True:
+            result = Service.delay10SecondesInput("\t- Alors mon nombre est : ?\n")
+            checknumber = self.checkNumberValue(result)
+            if checknumber == -1:
+                print("    \t- Vous avez dépassé le délai de 10 secondes ! Vous perdez l'essai courant\n\t\t\t et il vous reste {} essai(s) !\n".format(str(self.list_level[self.id_level].nb_try - self.nb_coup)))
+            elif checknumber == -2:
+                print("    \t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(str(self.list_level[self.id_level].interval)))
+            else:
+                break
+            if self.list_level[self.id_level].nb_try == self.nb_coup:
+                return -1
+        return checknumber
 
     def checkNumberValue(self, number_value) :
         """ Vérifie le nombre """
+        if number_value == '': 
+            self.nb_coup = self.nb_coup + 1
+            return -1
+        if number_value.isdigit() == False:
+            return -2
+        number_value = int(number_value)
+        if number_value <= 0 or number_value > self.list_level[self.id_level].interval:
+            return -2
+        self.nb_coup = self.nb_coup + 1
+        return number_value
 
     #TODO: Est ce que c'est la bonne réponse
         #? Reussi
@@ -85,6 +108,24 @@ class Game :
         #? Choix : Quitter ?
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
+        print("\t- Vous avez perdu ! Mon nombre est "+ self.nb_python + " !\n")
+        while True:
+            inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
+            checkInput = self.checkCaseUserLoose(inputUser)
+            if checkInput == -1:
+                return -1
+            elif checkInput == 1:
+                if self.id_level != 0:
+                    self.id_level = self.id_level - 1
+                return 1
+
+    def checkCaseUserLoose(self, inputUser) :
+        if inputUser == '' or inputUser.lower == 'n': 
+            return -1
+        if inputUser.lower == 'o':
+            return 1
+        return 0
+ 
         
     #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
         #? Choix : Rejouer, et il redescend d'un level ?
