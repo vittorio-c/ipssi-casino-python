@@ -5,7 +5,7 @@ from .User import User
 class Game :
     """ Contient la logique du JEU """
 
-    User = None
+    connected_user = None
     level = []
     id_level = None
     nb_python = None
@@ -26,51 +26,80 @@ class Game :
         self.time_interval = 10 # secondes
         
     def run(self) :
-        Scenario.launchGame(self.list_level[0])
+        Scenario.launchGame()
+        user_name = Scenario.askUsername()
+        Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
 
-        # Todo: Implémenter la recupération du USER s'il a deja joué sinon en créer un
-        #? self.User = User
+######################################## TODO: ##########################################
+
+    # Todo: Implémenter la recupération du USER s'il a deja joué sinon en créer un
+    def getUser(self) :
+        """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
+
+    #TODO: Determiner si première partie ou non
+        #TODO: Choisir le level
+    def checkUserProgression(self) :
+        """ Vérifier son dernier niveau """
+
+    def selectLevel(self, level) :
+        """ Selectionne un niveau """
+
+    #TODO: Demander la mise
+        #TODO: Check mise 
+        #? Est que c'est un int
+        #? < 0 AND >= SOLDE
+        #? Retirer du SOLDE
+    def askMise(self) :
+        """ Demande la mise au USER et la vérifie """
+
+    def checkMiseValue(self, bet_value) :
+        """ Vérifie la mise """
+
+    #TODO: Tirer un nombre au hasard
+    def generateRandomNumber(self, max) :
+        """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
+
+    #TODO: Recuperer le nombre de l'USER
+        #TODO: Check le nombre
+    def askUserNumber(self) :
+        """ Demande un nombre au USER et le vérifie """
+
+    def checkNumberValue(self, number_value) :
+        """ Vérifie le nombre """
+
+    #TODO: Est ce que c'est la bonne réponse
+        #? Reussi
+        #? Supérieur
+        #? Inférieur
+        #? Est ce que c'est le dernier essai
+    def giveClueForNumber(self, number) :
+        """ Retourne un indice en fonction du nombre du USER """
+
+    #TODO: Check solde
+        #? EST CE QUE C'EST SUPERIEUR A 0 ?
+    def hasMoney(self) :
+        """ Retourne si le USER possède encore de l'argent """
+
+    #TODO: Si on perd, lancer le compteur de 10 secondes, quitter par défaut
+        #? Choix : Rejouer, et il redescend d'un level ?
+        #? Choix : Quitter ?
+    def inCaseUserLoose(self) :
+        """ Dans le cas où le user perd son level """
         
-        #TODO: Determiner si première partie ou non
-            #TODO: Choisir le level
+    #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
+        #? Choix : Rejouer, et il redescend d'un level ?
+        #? Choix : Quitter ?
+        #? Est ce que l'on est au level max ?
+        #? Combien a-t-il gagné (GESTION DES GAINS)
+    def inCaseUserWin(self) :
+        """ Dans le cas où le user gagne son level """
+    
+    #TODO: AFFICHER LES STATS
+    def showUserStats(self) :
+        """ Affiche les meilleurs et pires statistiques """
 
-        #TODO: Demander la mise
-            #TODO: Check mise 
-            #? Est que c'est un int
-            #? < 0 AND >= SOLDE
-            #? Retirer du SOLDE
-
-        #TODO: Tirer un nombre au hasard
-
-        #TODO: Est ce que c'est la bonne réponse
-            #? Reussi
-            #? Supérieur
-            #? Inférieur
-            #? Est ce que c'est le dernier essai
-
-        #TODO: Recuperer le nombre de l'USER
-            #TODO: Timer 10 secondes (Peut elle prendre une fonction en parametre)
-        
-        #TODO: Check solde
-            #? EST CE QUE C'EST SUPERIEUR A 0 ?
-
-        #TODO: Si on perd, lancer le compteur de 10 secondes, quitter par défaut
-            #? Choix : Rejouer, et il redescend d'un level ?
-            #? Choix : Quitter ?
-            
-        #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
-            #? Choix : Rejouer, et il redescend d'un level ?
-            #? Choix : Quitter ?
-
-            #? Est ce que l'on est au level max ?
-            #? Combien a-t-il gagné (GESTION DES GAINS)
-                #TODO: AFFICHER LES STATS
-        
-        #TODO: Gestion des gains
-            #? Voir SEBASTIEN
-
-        #TODO: ENREGISTRER LES INFOS DANS UN FICHIER
-        
-
-
-            
+    #TODO: Gestion des gains
+        #? Voir SEBASTIEN
+    def manageUserGain(self) :
+        """ Retourne le gain du USER  """
+        # regarder dans `ConfigurationLevel` pour savoir comment configurer les `gains` de chaque level

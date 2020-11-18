@@ -2,25 +2,37 @@ import time
 from .TextColor import TextColor
 
 class Scenario :
-    """ Permet l'affichage des textes d'ambiances et contextuel """
+    """ Permet l'affichage des textes d'ambiances et contextuels """
 
     @staticmethod
-    def launchGame(level) :
+    def launchGame() :
         print(TextColor.ColorText('\n**********************************************************', 'MAGENTA'))
-
-        user_name = input(TextColor.ColorText('\t- Je suis ' + TextColor.ColorText('Python', 'YELLOW', 'MAGENTA') + '. Quel est votre pseudo ? \n ', 'MAGENTA'))
+            
+    @staticmethod
+    def askUsername() :
+        user_name = input(TextColor.ColorText('\t- Je suis ' + TextColor.ColorText('Python', 'YELLOW', 'MAGENTA') +
+         '. Quel est votre pseudo ? \n ', 'MAGENTA'))
 
         print(TextColor.ColorText('\n\t- Hello ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
             ', vous avez ' + TextColor.ColorText('10 €', 'YELLOW', 'MAGENTA') +
             ', Très bien ! Installez vous SVP à la table de pari.\n\tJe vous expliquerai le principe du jeu : \n', 'MAGENTA'))
         
-        show_rules = input(TextColor.ColorText('\t- Souhaitez-vous connaitre les règles ?(O/N) \n ', 'YELLOW'))
-        
+        return user_name
+
+    @staticmethod
+    def showIntervalNumber(level) :
         print(TextColor.ColorText('\t- Je viens de penser à un nombre entre ' +
             TextColor.ColorText('1 et ' + str(level.interval), 'YELLOW', 'MAGENTA') + '. Devinez lequel ?\n', 'MAGENTA'))
+
+    @staticmethod
+    def askShowRules(level) :
+        show_rules = input(TextColor.ColorText('\t- Souhaitez-vous connaitre les règles ?(O/N) \n ', 'YELLOW'))
+        
+        Scenario.showIntervalNumber(level)
+        
         if (show_rules.casefold() == 'o') :
             Scenario.rules(level)
-            
+
     @staticmethod
     def rules(level) :
         print(TextColor.ColorText('\t- Attention : vous avez le droit à ' + 
@@ -39,3 +51,5 @@ class Scenario :
         print(TextColor.ColorText('\t- Dès que vous devinez mon nombre : vous avez le droit de quitter le jeu et ' +
             TextColor.ColorText('de partir avec vos gains', 'YELLOW', 'GREEN') + ' OU \n\tde continuer le jeu en passant ' +
             TextColor.ColorText('au level supérieur', 'YELLOW', 'GREEN') + '.\n', 'GREEN'))
+
+    # ...
