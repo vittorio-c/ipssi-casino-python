@@ -65,28 +65,28 @@ class Game :
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
         while True:
-            result = Service.delay10SecondesInput("\t- Alors mon nombre est : ?\n")
-            checknumber = self.checkNumberValue(result)
-            if checknumber == -1:
-                print("    \t- Vous avez dépassé le délai de 10 secondes ! Vous perdez l'essai courant\n\t\t\t et il vous reste {} essai(s) !\n".format(str(self.list_level[self.id_level].nb_try - self.nb_coup)))
-            elif checknumber == -2:
-                print("    \t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(str(self.list_level[self.id_level].interval)))
+            user_number = Service.delay10SecondesInput(Scenario.askNumberToUser())
+            checked_number = self.checkNumberValue(user_number)
+            if checked_number == "Delai depasse":
+                Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
+            elif checked_number == "NaN" or checked_number == "Hors limite":
+                Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
             else:
                 break
             if self.list_level[self.id_level].nb_try == self.nb_coup:
                 return -1
-        return checknumber
+        return checked_number
 
     def checkNumberValue(self, number_value) :
         """ Vérifie le nombre """
         if number_value == '': 
             self.nb_coup = self.nb_coup + 1
-            return -1
+            return "Delai depasse"
         if number_value.isdigit() == False:
-            return -2
+            return "NaN"
         number_value = int(number_value)
         if number_value <= 0 or number_value > self.list_level[self.id_level].interval:
-            return -2
+            return "Hors limite"
         self.nb_coup = self.nb_coup + 1
         return number_value
 
@@ -108,23 +108,25 @@ class Game :
         #? Choix : Quitter ?
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
-        print("\t- Vous avez perdu ! Mon nombre est "+ self.nb_python + " !\n")
+        Scenario.looseMessage(self.nb_python)
         while True:
-            inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
+            
+            inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
             checkInput = self.checkCaseUserLoose(inputUser)
-            if checkInput == -1:
-                return -1
-            elif checkInput == 1:
+            if checkInput == 'quit':
+                return 'quit'
+            elif checkInput == 'continue':
                 if self.id_level != 0:
                     self.id_level = self.id_level - 1
-                return 1
+                return 'continue'
 
     def checkCaseUserLoose(self, inputUser) :
+        """ Check la réponse de l'user """
         if inputUser == '' or inputUser.lower == 'n': 
-            return -1
+            return 'quit'
         if inputUser.lower == 'o':
-            return 1
-        return 0
+            return 'continue'
+        return 'error'
  
         
     #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut

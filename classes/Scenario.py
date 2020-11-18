@@ -52,4 +52,25 @@ class Scenario :
             TextColor.ColorText('de partir avec vos gains', 'YELLOW', 'GREEN') + ' OU \n\tde continuer le jeu en passant ' +
             TextColor.ColorText('au level supérieur', 'YELLOW', 'GREEN') + '.\n', 'GREEN'))
 
+    @staticmethod
+    def looseMessage(number_python) :
+        print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
+        '" !\n ' + TextColor.ColorText('trop petit', 'YELLOW', 'RED') + ' !\n', 'RED'))
+
+    @staticmethod
+    def askNewTry() :
+        return "\t- Souhaitez-vous continuer la partie (O/N) ?\n"
+
+    @staticmethod
+    def askNumberToUser() :
+        return "\t- Alors mon nombre est : ?\n"
+
+    @staticmethod
+    def timeoutMessage(nb_try) :
+        print("\t- Vous avez dépassé le délai de 10 secondes ! Vous perdez l'essai courant\n\t\t\t et il vous reste {} essai(s) !\n".format(nb_try))
+
+    @staticmethod
+    def notUnderstandMessage(nb_max) :
+        print("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(nb_max))
+
     # ...
