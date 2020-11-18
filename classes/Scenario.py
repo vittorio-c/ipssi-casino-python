@@ -62,4 +62,26 @@ class Scenario :
         number = input('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' + 
             TextColor.ColorText('1 et ' + level.interval, 'YELLOW') + ' : \n')
         return number
+      
+    def clueMessageIsInferior() :
+        print('\t- Votre nbre est ' + TextColor.ColorText('trop grand', 'YELLOW') + ' !\n')
+
+    @staticmethod
+    def clueMessageIsSuperior() :
+        print('\t- Votre nbre est ' + TextColor.ColorText('trop petit', 'YELLOW') + ' !\n')
+
+    @staticmethod
+    def indicateLastChance() :
+        print('\t- Il vous reste ' + TextColor.ColorText('une chance', 'RED') + ' !\n')
+
+    @staticmethod
+    def winMessage(nb_coup, gain) :
+        print('\t- Bingo René, vous avez gagné ' + TextColor.ColorText('en "'+ str(nb_coup) +'" coup(s)', 'YELLOW')
+        + ' et vous avez emporté ' + TextColor.ColorText('"'+ str(gain) +'" €', 'YELLOW')+ ' !\n')
+
+    @staticmethod
+    def looseMessage(number_python) :
+        print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
+        '" !\n ' + TextColor.ColorText('trop petit', 'YELLOW', 'RED') + ' !\n', 'RED'))
+        
     # ...

@@ -1,4 +1,4 @@
-from .Database import Database
+from .SqliteDatabase import SqliteDatabase
 
 class Controller :
     """ Permet de récupérer des éléments spécifiques depuis la base de données """
@@ -6,18 +6,20 @@ class Controller :
     database = None
 
     def __init__(self) :
-        database = Database()
+        self.database = SqliteDatabase()
 
     def getUserByName(self, name) :
         """ Récupère le user via son nom depuis la base de données"""
-    
-    # Doit retourner le USER créé
-    def setUser(self) :
+        user = self.database.getUserByName(name)
+        return user
+
+    def createUser(self, user_name) :
         """ Insert un user en base de données """
-    
-    # A voir plus tard pour les stats
+        return self.database.createUser(user_name)
+
+    # TODO A voir plus tard pour les stats
     def getStatsByName(self, name) :
         """ Récupère les stats via le nom du user depuis la base de données"""
-    
+
     def setStat(self, name) :
         """ Insert une stat en base de données à partir du nom du user """
