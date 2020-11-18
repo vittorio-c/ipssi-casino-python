@@ -63,9 +63,20 @@ class Game :
         #TODO: Check le nombre
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
+        user_number = Scenario.askNumber()
 
-    def checkNumberValue(self, number_value) :
+        while(not self.isCorrectNumberValue(user_number)) :
+            user_number = Scenario.wrongNumberMessage(self.list_level[int(self.id_level)])
+
+        return user_number
+
+    def isCorrectNumberValue(self, number_value) :
         """ Vérifie le nombre """
+        try:
+            int(number_value)
+            return True
+        except :
+            return False
 
     #TODO: Est ce que c'est la bonne réponse
         #? Reussi

@@ -52,4 +52,14 @@ class Scenario :
             TextColor.ColorText('de partir avec vos gains', 'YELLOW', 'GREEN') + ' OU \n\tde continuer le jeu en passant ' +
             TextColor.ColorText('au level supérieur', 'YELLOW', 'GREEN') + '.\n', 'GREEN'))
 
+    @staticmethod
+    def askNumber() :
+        number = input("\t- Alors mon nombre est : ?\n")
+        return number
+    
+    @staticmethod
+    def wrongNumberMessage(level) :
+        number = input('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' + 
+            TextColor.ColorText('1 et ' + level.interval, 'YELLOW') + ' : \n')
+        return number
     # ...
