@@ -1,6 +1,7 @@
 from .Scenario import Scenario
 from .ConfigurationLevel import ConfigurationLevel
 from .User import User
+from .Controller import Controller
 
 class Game :
     """ Contient la logique du JEU """
@@ -33,17 +34,39 @@ class Game :
 ######################################## TODO: ##########################################
 
     # Todo: Implémenter la recupération du USER s'il a deja joué sinon en créer un
-    def getUser(self) :
+    def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
+        controller = Controller()
+        user = controller.getUserByName(user_name)
+        if user:
+            if user.last_level > 1:
+                self.selectLevel()
+        else:
+            user= controller.setUser(user_name)   
+        return user  
 
     #TODO: Determiner si première partie ou non
         #TODO: Choisir le level
-    def checkUserProgression(self) :
+    def checkUserProgression(self, user_name) :
         """ Vérifier son dernier niveau """
+        controller = Controller()
+        user = controller.getUserByName(user_name)
+        return user.last_level 
 
-    def selectLevel(self, level) :
+    def selectLevel(self, user_name, level) :
         """ Selectionne un niveau """
+        controller = Controller()
+        user = controller.getUserByName(user_name)
+        if user.is_first_time==False:
+            ConfigurationLevel=input("veuillez choisir le level entre 1 et 3 s'il vous plaît")
+            while ConfigurationLevel < 0 or ConfigurationLevel > 3 :
+                ConfigurationLevel=input("veuillez choisir le level entre 1 et 3 s'il vous plaît")
+        else:
+             ConfigurationLevel=1  
+        return ConfigurationLevel    
+            
 
+        
     #TODO: Demander la mise
         #TODO: Check mise 
         #? Est que c'est un int
@@ -58,7 +81,7 @@ class Game :
     #TODO: Tirer un nombre au hasard
     def generateRandomNumber(self, max) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
-
+        
     #TODO: Recuperer le nombre de l'USER
         #TODO: Check le nombre
     def askUserNumber(self) :
