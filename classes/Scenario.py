@@ -23,7 +23,7 @@ class Scenario :
     def askMise() :
         mise = input(TextColor.ColorText('\t- Le jeu commence, entrez votre mise : ?\n', 'MAGENTA'))
 
-     @staticmethod
+    @staticmethod
     def miseInvalid(montant_max) :
         mise = input(TextColor.ColorText('\t- Le montant saisi n\'est pas valide. Entrer SVP un montant entre 1 et ' + montant_max + ' € :  ?\n ', 'MAGENTA'))
 
