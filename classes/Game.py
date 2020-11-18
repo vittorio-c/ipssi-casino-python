@@ -24,7 +24,7 @@ class Game :
             ConfigurationLevel(3, 7, 30),
         ]
         self.time_interval = 10 # secondes
-        
+
     def run(self) :
         Scenario.launchGame()
         user_name = Scenario.askUsername()
@@ -45,7 +45,7 @@ class Game :
         """ Selectionne un niveau """
 
     #TODO: Demander la mise
-        #TODO: Check mise 
+        #TODO: Check mise
         #? Est que c'est un int
         #? < 0 AND >= SOLDE
         #? Retirer du SOLDE
@@ -103,7 +103,7 @@ class Game :
         #? Choix : Quitter ?
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
-        
+
     #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
         #? Choix : Rejouer, et il redescend d'un level ?
         #? Choix : Quitter ?
@@ -111,7 +111,7 @@ class Game :
         #? Combien a-t-il gagné (GESTION DES GAINS)
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
-    
+
     #TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
@@ -121,3 +121,9 @@ class Game :
     def manageUserGain(self) :
         """ Retourne le gain du USER  """
         # regarder dans `ConfigurationLevel` pour savoir comment configurer les `gains` de chaque level
+
+    def hasSolde(self) :
+        if self.solde <= 0 :
+            return False
+        else :
+            return True
