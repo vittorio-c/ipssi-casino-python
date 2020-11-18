@@ -56,7 +56,7 @@ A :
 
 2 groupe de 2
 
-B :
+B : TEST
 - Sébastien
 - Narcisse
 
