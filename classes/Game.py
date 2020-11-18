@@ -57,11 +57,11 @@ class Game :
         """ Selectionne un niveau """
         if not connected_user.is_first_time :
             user_level = Scenario.askLevel(connected_user.last_level)
-            while self.isCorrectLevel(user_level):
+            while not self.isCorrectLevel(user_level):
                 user_level = Scenario.wrongLevel(connected_user.last_level)
-            id_level=user_level-1
+            id_level = user_level-1
         else:
-            id_level=0
+            id_level = 0
 
     def isCorrectLevel(self,level):
         """Vérifie le level entré par l'user"""
