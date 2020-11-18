@@ -75,7 +75,7 @@ class Game :
     def hasWin(self, number) :
         """ Retourne si le USER a gagner """
         comparison = self.compareNumberUser(number)
-        if (comparison == 'Egale') :
+        if (comparison == 'equal') :
             return True
         else :
             return False
@@ -85,13 +85,13 @@ class Game :
         """ Compare la valeur du USER par rapport à la réponse, donne des indications au USER"""
         if (number > self.nb_python) :
             Scenario.clueMessageIsInferior()
-            return 'Supérieur'
+            return 'superior'
         elif (number < self.nb_python) :
             Scenario.clueMessageIsSuperior()
-            return 'Inférieur'
+            return 'inferior'
         else :
             Scenario.winMessage(self.nb_coup , self.gain)
-            return 'Egale'
+            return 'equal'
 
     #TODO: Check solde
         #? EST CE QUE C'EST SUPERIEUR A 0 ?
