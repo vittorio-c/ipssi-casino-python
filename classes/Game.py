@@ -29,7 +29,6 @@ class Game :
         Scenario.launchGame()
         user_name = Scenario.askUsername()
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
-        self.switcherClue('Egale')
 
 ######################################## TODO: ##########################################
 
