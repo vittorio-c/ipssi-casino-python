@@ -20,6 +20,16 @@ class Scenario :
         return user_name
 
     @staticmethod
+    def askLevel(level_max):
+        user_level = input("Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        return user_level
+
+    @staticmethod
+    def wrongLevel(level_max):
+        user_level = input("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        return user_level
+
+    @staticmethod
     def showIntervalNumber(level) :
         print(TextColor.ColorText('\t- Je viens de penser à un nombre entre ' +
             TextColor.ColorText('1 et ' + str(level.interval), 'YELLOW', 'MAGENTA') + '. Devinez lequel ?\n', 'MAGENTA'))

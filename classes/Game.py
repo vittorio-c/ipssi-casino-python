@@ -42,7 +42,7 @@ class Game :
             if user.last_level > 1:
                 self.selectLevel()
         else:
-            user= controller.setUser(user_name)   
+            user= controller.createUser(user_name)   
         return user  
 
     #TODO: Determiner si première partie ou non
@@ -53,20 +53,29 @@ class Game :
         user = controller.getUserByName(user_name)
         return user.last_level 
 
-    def selectLevel(self, user_name, level) :
+    def askLevel(self) :
         """ Selectionne un niveau """
-        controller = Controller()
-        user = controller.getUserByName(user_name)
-        if user.is_first_time==False:
-            ConfigurationLevel=input("veuillez choisir le level entre 1 et 3 s'il vous plaît")
-            while ConfigurationLevel < 0 or ConfigurationLevel > 3 :
-                ConfigurationLevel=input("veuillez choisir le level entre 1 et 3 s'il vous plaît")
+        if not connected_user.is_first_time :
+            user_level= Scenario.askLevel(connected_user.last_level)
+            while self.isCorrectLevel(user_level):
+                user_level= Scenario.wrongLevel(connected_user.last_level)
+            id_level=user_level-1
         else:
-             ConfigurationLevel=1  
-        return ConfigurationLevel    
-            
+            id_level=0
 
-        
+    def isCorrectLevel(self,level):
+        """Vérifie le level entré par l'user"""
+        try:
+            int(level)
+            if level > 0 or level <= connected_user.last_level:
+                return True
+            else:
+                return False    
+        except:
+            return False
+
+
+             
     #TODO: Demander la mise
         #TODO: Check mise 
         #? Est que c'est un int
@@ -81,7 +90,6 @@ class Game :
     #TODO: Tirer un nombre au hasard
     def generateRandomNumber(self, max) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
-        
     #TODO: Recuperer le nombre de l'USER
         #TODO: Check le nombre
     def askUserNumber(self) :
