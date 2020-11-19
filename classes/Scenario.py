@@ -37,9 +37,7 @@ class Scenario :
     @staticmethod
     def askShowRules(level) :
         show_rules = input(TextColor.ColorText('\t- Souhaitez-vous connaitre les règles ?(O/N) \n ', 'YELLOW'))
-        
-        Scenario.showIntervalNumber(level)
-        
+                
         if (show_rules.casefold() == 'o') :
             Scenario.rules(level)
 

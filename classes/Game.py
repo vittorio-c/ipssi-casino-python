@@ -32,8 +32,11 @@ class Game :
         """ Execution du jeu """
         Scenario.launchGame()
         user_name = Scenario.askUsername()
+        self.connected_user = self.getUser(user_name)
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
-
+        self.askLevel()
+        self.generateRandomNumber()
+        
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
         controller = Controller()
@@ -80,6 +83,7 @@ class Game :
 
     def generateRandomNumber(self) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
+        Scenario.showIntervalNumber(self.list_level[self.id_level])
         level = self.list_level[int(self.id_level)]
         random_number = randint(1, level.interval)
         self.nb_python = random_number
