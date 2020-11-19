@@ -13,12 +13,10 @@ class Game :
     id_level = None
     nb_python = None
     nb_user = None
-    nb_coup = None
+    nb_coup = 0
     list_level = None
     mise = None
-    dotations = None
     gain = None
-    solde = None
 
     def __init__(self) :
         self.list_level = [
@@ -35,7 +33,9 @@ class Game :
         self.connected_user = self.getUser(user_name)
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
         self.askLevel()
+        self.askMise()
         self.generateRandomNumber()
+        self.askUserNumber()
         
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
@@ -79,15 +79,15 @@ class Game :
         """ Demande la mise au USER et la vérifie """
         mise = Scenario.askMise()
         while (not self.isCorrectMiseValue(mise)) :
-            mise = Scenario.miseInvalid(self.solde)
-        self.mise = mise
-        self.solde -= self.mise
+            mise = Scenario.miseInvalid(self.connected_user.solde)
+        self.mise = int(mise)
+        self.connected_user.solde -= self.mise
 
     def isCorrectMiseValue(self, bet_value) :
         """ Vérifie la mise """
         try:
-            int(bet_value)
-            if (not(bet_value > 0) and (bet_value <= self.solde)) :
+            bet_value = int(bet_value)
+            if ((bet_value <= 0) or (bet_value > self.connected_user.solde)) :
                 return False
             return True
         except:
@@ -102,31 +102,28 @@ class Game :
 
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
-        while True:
+        user_number = ''
+        isCorrect = False
+        while (self.list_level[self.id_level].nb_try != self.nb_coup) and not isCorrect :
             user_number = Service.delay10SecondesInput(Scenario.askNumberToUser())
-            checked_number = self.checkNumberValue(user_number)
-            if checked_number == "Delai depasse":
-                Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
-            elif checked_number == "NaN" or checked_number == "Hors limite":
-                Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
-            else:
-                break
-            if self.list_level[self.id_level].nb_try == self.nb_coup:
-                return -1
-        return checked_number
+            isCorrect = self.isCorrectNumberValue(user_number)
+        self.nb_user = int(user_number) if isCorrect else ''
 
-    def checkNumberValue(self, number_value) :
+    def isCorrectNumberValue(self, number_value) :
         """ Vérifie le nombre """
         if number_value == '': 
             self.nb_coup = self.nb_coup + 1
-            return "Delai depasse"
+            Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
+            return False
         if number_value.isdigit() == False:
-            return "NaN"
+            Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
+            return False
         number_value = int(number_value)
         if number_value <= 0 or number_value > self.list_level[self.id_level].interval:
-            return "Hors limite"
+            Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
+            return False
         self.nb_coup = self.nb_coup + 1
-        return number_value
+        return True
 
     def hasWin(self, number) :
         """ Retourne si le USER a gagner """
