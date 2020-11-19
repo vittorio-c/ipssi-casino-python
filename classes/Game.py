@@ -86,7 +86,7 @@ class Game :
                 return True
             else:
                 return False
-        except ValueError as e :
+        except:
             return False
 
     def askMise(self) :

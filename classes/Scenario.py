@@ -50,10 +50,15 @@ class Scenario :
     @staticmethod
     def askShowRules(level) :
         show_rules = input(TextColor.ColorText('\t- Souhaitez-vous connaitre les règles ?(O/N) \n ', 'YELLOW'))
-
+        while(not show_rules.casefold() == 'o' and not show_rules.casefold() == 'n' ):
+            print(TextColor.ColorText('\t- Désolé, je n\'ai pas compris votre réponse.', 'RED')) 
+            show_rules = input(TextColor.ColorText('\t Veuillez répondre par (O/N) :\n ', 'YELLOW'))
         if (show_rules.casefold() == 'o') :
             Scenario.rules(level)
-
+            print(TextColor.ColorText('\t ******** Bienvenue au Casino-Game, Amusez-vous bien ! ********  \n', 'WHITE'))
+        elif (show_rules.casefold() == 'n'):
+            print(TextColor.ColorText('\t ******** Bienvenue au Casino-Game, Amusez-vous bien ! ******** \n', 'WHITE'))
+        
     @staticmethod
     def rules(level) :
         print(TextColor.ColorText('\t- Attention : vous avez le droit à ' +
