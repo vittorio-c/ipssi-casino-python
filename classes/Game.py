@@ -29,13 +29,11 @@ class Game :
         self.time_interval = 10 # secondes
 
     def run(self) :
+        """ Execution du jeu """
         Scenario.launchGame()
         user_name = Scenario.askUsername()
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
 
-######################################## TODO: ##########################################
-
-    # Todo: Implémenter la recupération du USER s'il a deja joué sinon en créer un
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
         controller = Controller()
@@ -47,8 +45,6 @@ class Game :
             user= controller.createUser(user_name)   
         return user  
 
-    #TODO: Determiner si première partie ou non
-        #TODO: Choisir le level
     def checkUserProgression(self, user_name) :
         """ Vérifier son dernier niveau """
         controller = Controller()
@@ -76,28 +72,18 @@ class Game :
         except:
             return False
 
-
-             
-    #TODO: Demander la mise
-        #TODO: Check mise
-        #? Est que c'est un int
-        #? < 0 AND >= SOLDE
-        #? Retirer du SOLDE
     def askMise(self) :
         """ Demande la mise au USER et la vérifie """
 
     def checkMiseValue(self, bet_value) :
         """ Vérifie la mise """
 
-    #TODO: Tirer un nombre au hasard
     def generateRandomNumber(self) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
         level = self.list_level[int(self.id_level)]
         random_number = randint(1, level.interval)
         self.nb_python = random_number
 
-    #TODO: Recuperer le nombre de l'USER
-        #TODO: Check le nombre
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
         while True:
@@ -113,11 +99,6 @@ class Game :
                 return -1
         return checked_number
 
-        while(not self.checkNumberValue(user_number)) :
-            user_number = Scenario.wrongNumberMessage(self.list_level[int(self.id_level)])
-
-        return user_number
-
     def checkNumberValue(self, number_value) :
         """ Vérifie le nombre """
         if number_value == '': 
@@ -131,11 +112,6 @@ class Game :
         self.nb_coup = self.nb_coup + 1
         return number_value
 
-    #TODO: Est ce que c'est la bonne réponse
-        #? Reussi
-        #? Supérieur
-        #? Inférieur
-        #? Est ce que c'est le dernier essai
     def hasWin(self, number) :
         """ Retourne si le USER a gagner """
         comparison = self.compareNumberUser(number)
@@ -157,14 +133,6 @@ class Game :
             Scenario.winMessage(self.nb_coup , self.gain)
             return 'equal'
 
-    #TODO: Check solde
-        #? EST CE QUE C'EST SUPERIEUR A 0 ?
-    def hasMoney(self) :
-        """ Retourne si le USER possède encore de l'argent """
-
-    #TODO: Si on perd, lancer le compteur de 10 secondes, quitter par défaut
-        #? Choix : Rejouer, et il redescend d'un level ?
-        #? Choix : Quitter ?
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
         Scenario.looseMessage(self.nb_python)
@@ -186,11 +154,6 @@ class Game :
             return 'continue'
         return 'error'
         
-    #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
-        #? Choix : Rejouer, et il passe d'un level ?
-        #? Choix : Quitter ?
-        #? Est ce que l'on est au level max ?
-        #? Combien a-t-il gagné (GESTION DES GAINS)
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
         self.id_level = self.id_level + 1
@@ -221,18 +184,12 @@ class Game :
     def getGainWin(self) : 
         return self.list_level[self.id_level - 1].gain[str(self.id_level)][str(self.nb_coup)]
 
-    #TODO: AFFICHER LES STATS
-    def showUserStats(self) :
-        """ Affiche les meilleurs et pires statistiques """
-
-    #TODO: Gestion des gains
-        #? Voir SEBASTIEN
-    def manageUserGain(self) :
-        """ Retourne le gain du USER  """
-        # regarder dans `ConfigurationLevel` pour savoir comment configurer les `gains` de chaque level
-
     def hasSolde(self) :
         if self.solde <= 0 :
             return False
         else :
             return True
+
+    #TODO: AFFICHER LES STATS
+    def showUserStats(self) :
+        """ Affiche les meilleurs et pires statistiques """
