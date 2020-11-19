@@ -9,10 +9,11 @@ class User :
     solde = 10
     create_date = date.today()
 
-    def __init__(self, user_id, user_name, is_first_time, last_level, solde, create_date) :
+    def __init__(self, user_id, user_name, is_first_time, last_level, create_date, solde) :
         self.user_id = user_id
         self.user_name = user_name
         self.is_first_time = is_first_time
         self.last_level = last_level
         self.solde = solde
         self.create_date = create_date
+

@@ -2,6 +2,7 @@ from .Scenario import Scenario
 from .ConfigurationLevel import ConfigurationLevel
 from .User import User
 from .Controller import Controller
+from .Service import Service
 
 class Game :
     """ Contient la logique du JEU """
@@ -25,7 +26,7 @@ class Game :
             ConfigurationLevel(3, 7, 30),
         ]
         self.time_interval = 10 # secondes
-        
+
     def run(self) :
         Scenario.launchGame()
         user_name = Scenario.askUsername()
@@ -77,7 +78,7 @@ class Game :
 
              
     #TODO: Demander la mise
-        #TODO: Check mise 
+        #TODO: Check mise
         #? Est que c'est un int
         #? < 0 AND >= SOLDE
         #? Retirer du SOLDE
@@ -94,17 +95,57 @@ class Game :
         #TODO: Check le nombre
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
+        while True:
+            user_number = Service.delay10SecondesInput(Scenario.askNumberToUser())
+            checked_number = self.checkNumberValue(user_number)
+            if checked_number == "Delai depasse":
+                Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
+            elif checked_number == "NaN" or checked_number == "Hors limite":
+                Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
+            else:
+                break
+            if self.list_level[self.id_level].nb_try == self.nb_coup:
+                return -1
+        return checked_number
 
     def checkNumberValue(self, number_value) :
         """ Vérifie le nombre """
+        if number_value == '': 
+            self.nb_coup = self.nb_coup + 1
+            return "Delai depasse"
+        if number_value.isdigit() == False:
+            return "NaN"
+        number_value = int(number_value)
+        if number_value <= 0 or number_value > self.list_level[self.id_level].interval:
+            return "Hors limite"
+        self.nb_coup = self.nb_coup + 1
+        return number_value
 
     #TODO: Est ce que c'est la bonne réponse
         #? Reussi
         #? Supérieur
         #? Inférieur
         #? Est ce que c'est le dernier essai
-    def giveClueForNumber(self, number) :
-        """ Retourne un indice en fonction du nombre du USER """
+    def hasWin(self, number) :
+        """ Retourne si le USER a gagner """
+        comparison = self.compareNumberUser(number)
+        if (comparison == 'equal') :
+            return True
+        else :
+            return False
+
+
+    def compareNumberUser(self, number) :
+        """ Compare la valeur du USER par rapport à la réponse, donne des indications au USER"""
+        if (number > self.nb_python) :
+            Scenario.clueMessageIsInferior()
+            return 'superior'
+        elif (number < self.nb_python) :
+            Scenario.clueMessageIsSuperior()
+            return 'inferior'
+        else :
+            Scenario.winMessage(self.nb_coup , self.gain)
+            return 'equal'
 
     #TODO: Check solde
         #? EST CE QUE C'EST SUPERIEUR A 0 ?
@@ -116,6 +157,24 @@ class Game :
         #? Choix : Quitter ?
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
+        Scenario.looseMessage(self.nb_python)
+        while True:         
+            inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
+            checkInput = self.checkCaseUserLoose(inputUser)
+            if checkInput == 'quit':
+                return 'quit'
+            elif checkInput == 'continue':
+                if self.id_level != 0:
+                    self.id_level = self.id_level - 1
+                return 'continue'
+
+    def checkCaseUserLoose(self, inputUser) :
+        """ Check la réponse de l'user """
+        if inputUser == '' or inputUser.lower == 'n': 
+            return 'quit'
+        if inputUser.lower == 'o':
+            return 'continue'
+        return 'error'
         
     #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
         #? Choix : Rejouer, et il redescend d'un level ?
@@ -124,7 +183,7 @@ class Game :
         #? Combien a-t-il gagné (GESTION DES GAINS)
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
-    
+
     #TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
@@ -134,3 +193,9 @@ class Game :
     def manageUserGain(self) :
         """ Retourne le gain du USER  """
         # regarder dans `ConfigurationLevel` pour savoir comment configurer les `gains` de chaque level
+
+    def hasSolde(self) :
+        if self.solde <= 0 :
+            return False
+        else :
+            return True
