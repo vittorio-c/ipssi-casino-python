@@ -108,6 +108,11 @@ class Game :
                 return -1
         return checked_number
 
+        while(not self.checkNumberValue(user_number)) :
+            user_number = Scenario.wrongNumberMessage(self.list_level[int(self.id_level)])
+
+        return user_number
+
     def checkNumberValue(self, number_value) :
         """ Vérifie le nombre """
         if number_value == '': 

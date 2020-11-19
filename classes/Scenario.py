@@ -63,6 +63,17 @@ class Scenario :
             TextColor.ColorText('au level supérieur', 'YELLOW', 'GREEN') + '.\n', 'GREEN'))
 
     @staticmethod
+    def askNumber() :
+        number = input("\t- Alors mon nombre est : ?\n")
+        return number
+    
+    @staticmethod
+    def wrongNumberMessage(level) :
+        number = input('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' + 
+            TextColor.ColorText('1 et ' + level.interval, 'YELLOW') + ' : \n')
+        return number
+      
+    @staticmethod
     def askNewTry() :
         return "\t- Souhaitez-vous continuer la partie (O/N) ?\n"
 
@@ -99,5 +110,5 @@ class Scenario :
     def looseMessage(number_python) :
         print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
         '" !\n ' + TextColor.ColorText('trop petit', 'YELLOW', 'RED') + ' !\n', 'RED'))
-
+        
     # ...
