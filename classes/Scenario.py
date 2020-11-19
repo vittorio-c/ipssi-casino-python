@@ -117,6 +117,6 @@ class Scenario :
     @staticmethod
     def looseMessage(number_python) :
         print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
-        '" !\n ' + TextColor.ColorText('trop petit', 'YELLOW', 'RED') + ' !\n', 'RED'))
+        '" !\n ', 'RED'))
         
     # ...

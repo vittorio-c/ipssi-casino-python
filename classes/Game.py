@@ -35,8 +35,7 @@ class Game :
         self.askLevel()
         self.askMise()
         self.generateRandomNumber()
-        self.askUserNumber()
-        self.
+        self.hasEnoughTry()
         
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
@@ -137,14 +136,15 @@ class Game :
 
     def compareNumberUser(self) :
         """ Compare la valeur du USER par rapport à la réponse, donne des indications au USER"""
-        if (self.nb_user > self.nb_python) :
+        if (self.nb_user == '') :
+            return None
+        elif (self.nb_user > self.nb_python) :
             Scenario.clueMessageIsInferior()
             return 'superior'
         elif (self.nb_user < self.nb_python) :
             Scenario.clueMessageIsSuperior()
             return 'inferior'
         else :
-            Scenario.winMessage(self.nb_coup , self.gain)
             return 'equal'
 
     def inCaseUserLoose(self) :
@@ -152,51 +152,46 @@ class Game :
         Scenario.looseMessage(self.nb_python)
         while True:         
             inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
-            checkInput = self.checkCaseUserLoose(inputUser)
+            checkInput = self.checkChoiceUser(inputUser)
             if checkInput == 'quit':
                 return 'quit'
             elif checkInput == 'continue':
                 if self.id_level != 0:
                     self.id_level = self.id_level - 1
                 return 'continue'
-
-    def checkCaseUserLoose(self, inputUser) :
-        """ Check la réponse de l'user """
-        if inputUser == '' or inputUser.lower == 'n': 
-            return 'quit'
-        if inputUser.lower == 'o':
-            return 'continue'
-        return 'error'
         
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
-        self.id_level = self.id_level + 1
-        self.solde = self.solde + self.getGainWin()
-        if self.isLevelMaxReached():
-            return 0
-        print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
-        while True:
-            inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
-            checkInput = self.checkChoiceUser(inputUser)
-            if checkInput == -1:
-                return -1
-            elif checkInput == 1:
-                return 1
+        self.getGainWin()
+        self.connected_user.solde += self.gain
+        Scenario.winMessage(self.nb_coup , self.gain)
+        if not self.isLevelMaxReached():
+            self.id_level += 1
+            print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
+            while True:
+                inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
+                checkInput = self.checkChoiceUser(inputUser)
+                if checkInput == 'quit':
+                    return 'quit'
+                elif checkInput == 'continue':
+                    return 'continue'
+        return 'finished'
 
     def isLevelMaxReached(self) :
-        if self.id_level == len(self.list_level):
+        if self.id_level == len(self.list_level) - 1:
             return True
         return False
 
     def checkChoiceUser(self, inputUser) :
         if inputUser == '' or inputUser.lower() == 'n': 
-            return -1
+            return 'quit'
         if inputUser.lower() == 'o':
-            return 1
+            return 'continue'
         return 0
 
     def getGainWin(self) : 
-        return self.list_level[self.id_level - 1].gain[str(self.id_level)][str(self.nb_coup)]
+        self.list_level[self.id_level].generateArrayGain(self.mise)
+        self.gain = self.list_level[self.id_level].gain[str(self.id_level + 1)][str(self.nb_coup)]
 
     def hasSolde(self) :
         if self.solde <= 0 :
@@ -207,3 +202,11 @@ class Game :
     #TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
+
+    def hasEnoughTry(self) :
+        """ Retourne si le USER possède encore des essais """
+        while (self.list_level[self.id_level].nb_try != self.nb_coup) :
+            self.askUserNumber()
+            if(self.hasWin()) :
+                return self.inCaseUserWin()
+        return self.inCaseUserLoose()
