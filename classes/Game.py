@@ -1,6 +1,7 @@
 from .Scenario import Scenario
 from .ConfigurationLevel import ConfigurationLevel
 from .User import User
+from .Service import Service
 
 class Game :
     """ Contient la logique du JEU """
@@ -63,9 +64,31 @@ class Game :
         #TODO: Check le nombre
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
+        while True:
+            user_number = Service.delay10SecondesInput(Scenario.askNumberToUser())
+            checked_number = self.checkNumberValue(user_number)
+            if checked_number == "Delai depasse":
+                Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
+            elif checked_number == "NaN" or checked_number == "Hors limite":
+                Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
+            else:
+                break
+            if self.list_level[self.id_level].nb_try == self.nb_coup:
+                return -1
+        return checked_number
 
     def checkNumberValue(self, number_value) :
         """ Vérifie le nombre """
+        if number_value == '': 
+            self.nb_coup = self.nb_coup + 1
+            return "Delai depasse"
+        if number_value.isdigit() == False:
+            return "NaN"
+        number_value = int(number_value)
+        if number_value <= 0 or number_value > self.list_level[self.id_level].interval:
+            return "Hors limite"
+        self.nb_coup = self.nb_coup + 1
+        return number_value
 
     #TODO: Est ce que c'est la bonne réponse
         #? Reussi
@@ -103,6 +126,26 @@ class Game :
         #? Choix : Quitter ?
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
+        Scenario.looseMessage(self.nb_python)
+        while True:
+            
+            inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
+            checkInput = self.checkCaseUserLoose(inputUser)
+            if checkInput == 'quit':
+                return 'quit'
+            elif checkInput == 'continue':
+                if self.id_level != 0:
+                    self.id_level = self.id_level - 1
+                return 'continue'
+
+    def checkCaseUserLoose(self, inputUser) :
+        """ Check la réponse de l'user """
+        if inputUser == '' or inputUser.lower == 'n': 
+            return 'quit'
+        if inputUser.lower == 'o':
+            return 'continue'
+        return 'error'
+ 
         
     #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
         #? Choix : Rejouer, et il redescend d'un level ?
