@@ -36,7 +36,7 @@ class Game :
         user_name = Scenario.askUsername()
         self.connected_user = self.getUser(user_name)
         Scenario.sayHi(self.connected_user.user_name, self.connected_user.solde)
-        Scenario.askShowRules(self.list_level[self.id_level])
+        Scenario.askShowRules(self.list_level[self.id_level]) if self.connected_user.is_first_time else ''
         status = 'continue'
         self.askLevel()
         while (self.hasSolde() and status == 'continue' ) :
@@ -209,10 +209,6 @@ class Game :
         else :
             return True
 
-    #TODO: AFFICHER LES STATS
-    def showUserStats(self) :
-        """ Affiche les meilleurs et pires statistiques """
-
     def hasEnoughTry(self) :
         """ Retourne si le USER possède encore des essais """
         while (self.list_level[self.id_level].nb_try != self.nb_coup) :
@@ -242,3 +238,13 @@ class Game :
         """ Mise à jour les propriétés de la classe USER avant insertion dans la base de données """
         self.connected_user.is_first_time = False
         self.connected_user.last_level = self.id_level + 1
+
+######################## TODO: STATS ########################
+    #TODO: AFFICHER LES STATS
+    def showUserStats(self) :
+        """ Affiche les meilleurs et pires statistiques """
+    
+    #TODO: SAUVEGARDER LA MANCHE A LA FIN
+    #TODO:
+
+    
