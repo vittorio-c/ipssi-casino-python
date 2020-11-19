@@ -95,8 +95,26 @@ class Game :
         #? Supérieur
         #? Inférieur
         #? Est ce que c'est le dernier essai
-    def giveClueForNumber(self, number) :
-        """ Retourne un indice en fonction du nombre du USER """
+    def hasWin(self, number) :
+        """ Retourne si le USER a gagner """
+        comparison = self.compareNumberUser(number)
+        if (comparison == 'equal') :
+            return True
+        else :
+            return False
+
+
+    def compareNumberUser(self, number) :
+        """ Compare la valeur du USER par rapport à la réponse, donne des indications au USER"""
+        if (number > self.nb_python) :
+            Scenario.clueMessageIsInferior()
+            return 'superior'
+        elif (number < self.nb_python) :
+            Scenario.clueMessageIsSuperior()
+            return 'inferior'
+        else :
+            Scenario.winMessage(self.nb_coup , self.gain)
+            return 'equal'
 
     #TODO: Check solde
         #? EST CE QUE C'EST SUPERIEUR A 0 ?

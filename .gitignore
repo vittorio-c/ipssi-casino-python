@@ -1,2 +1,3 @@
 /classes/__pycache__
-/testNarcisseSeb.py
+/test.py
+.sqlite_database.db
