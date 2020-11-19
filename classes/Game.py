@@ -193,8 +193,8 @@ class Game :
         #? Combien a-t-il gagné (GESTION DES GAINS)
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
-        self.solde = self.solde + self.gain
         self.id_level = self.id_level + 1
+        self.solde = self.solde + self.getGainWin()
         if self.isLevelMaxReached():
             return 0
         print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
@@ -217,6 +217,9 @@ class Game :
         if inputUser.lower() == 'o':
             return 1
         return 0
+
+    def getGainWin(self) : 
+        return self.list_level[self.id_level - 1].gain[str(self.id_level)][str(self.nb_coup)]
 
     #TODO: AFFICHER LES STATS
     def showUserStats(self) :
