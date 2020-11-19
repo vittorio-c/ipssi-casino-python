@@ -37,18 +37,21 @@ class Game :
         Scenario.launchGame()
         user_name = Scenario.askUsername()
         self.connected_user = self.getUser(user_name)
-        Scenario.sayHi(self.connected_user.user_name, self.connected_user.solde)
-        Scenario.askShowRules(self.list_level[self.id_level]) if self.connected_user.is_first_time else ''
-        status = 'continue'
-        self.askLevel()
-        while (self.hasSolde() and status == 'continue' ) :
-            self.askMise()
-            self.generateRandomNumber()
-            status = self.hasEnoughTry()
-            self.resetProperties()
-            self.updateLocalUser()
-            self.user_controller.updateUser(self.connected_user)
-        self.handleStatusGame(status)
+        if not self.hasSolde() :
+            Scenario.tooPoorMessage()
+        else :
+            Scenario.sayHi(self.connected_user.user_name, self.connected_user.solde)
+            Scenario.askShowRules(self.list_level[self.id_level]) if self.connected_user.is_first_time else ''
+            status = 'continue'
+            while (self.hasSolde() and status == 'continue' ) :
+                self.askLevel()
+                self.askMise()
+                self.generateRandomNumber()
+                status = self.hasEnoughTry()
+                self.resetProperties()
+                self.updateLocalUser()
+                self.user_controller.updateUser(self.connected_user)
+            self.handleStatusGame(status)
 
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
@@ -180,14 +183,13 @@ class Game :
         if not self.isLevelMaxReached():
             self.id_level += 1
             Scenario.nextLevel(str(self.id_level + 1))
-            while True:
-                inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
-                checkInput = self.checkChoiceUser(inputUser)
-                if checkInput == 'quit':
-                    return 'quit'
-                elif checkInput == 'continue':
-                    return 'continue'
-        return 'finished'
+        while True:
+            inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
+            checkInput = self.checkChoiceUser(inputUser)
+            if checkInput == 'quit':
+                return 'quit'
+            elif checkInput == 'continue':
+                return 'continue'
 
     def isLevelMaxReached(self) :
         if self.id_level == len(self.list_level) - 1:
