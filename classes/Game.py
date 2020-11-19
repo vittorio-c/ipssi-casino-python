@@ -1,6 +1,7 @@
 from .Scenario import Scenario
 from .ConfigurationLevel import ConfigurationLevel
 from .User import User
+from random import randint
 from .Controller import Controller
 from .Service import Service
 
@@ -89,8 +90,12 @@ class Game :
         """ Vérifie la mise """
 
     #TODO: Tirer un nombre au hasard
-    def generateRandomNumber(self, max) :
+    def generateRandomNumber(self) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
+        level = self.list_level[int(self.id_level)]
+        random_number = randint(1, level.interval)
+        self.nb_python = random_number
+
     #TODO: Recuperer le nombre de l'USER
         #TODO: Check le nombre
     def askUserNumber(self) :
