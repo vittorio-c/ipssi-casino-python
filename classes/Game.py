@@ -19,6 +19,7 @@ class Game :
     solde = None
     user_controller = None
     stats_controller = None
+    statusLevel = None
 
     def __init__(self) :
         self.list_level = [
@@ -47,9 +48,11 @@ class Game :
                 self.askMise()
                 self.generateRandomNumber()
                 status = self.hasEnoughTry()
-                self.resetProperties()
                 self.updateLocalUser()
                 self.user_controller.updateUser(self.connected_user)
+                self.insertLevelInDatabase()
+                self.resetProperties()
+            self.showUserStats()
             self.handleStatusGame(status)
 
     def getUser(self,user_name) :
@@ -161,6 +164,8 @@ class Game :
 
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
+        self.statusLevel = 0
+        self.gain = 0
         Scenario.looseMessage(self.nb_python)
         if (not self.hasSolde()) :
             return 'tooPoor'
@@ -176,6 +181,7 @@ class Game :
 
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
+        self.statusLevel = 1
         self.getGainWin()
         self.connected_user.solde += self.gain
         Scenario.winMessage(self.connected_user.user_name, self.nb_coup , self.gain)
@@ -236,6 +242,7 @@ class Game :
         self.nb_coup = 0
         self.mise = None
         self.gain = None
+        self.statusLevel = None
 
     def updateLocalUser(self) :
         """ Mise à jour les propriétés de la classe USER avant insertion dans la base de données """
@@ -243,9 +250,27 @@ class Game :
         self.connected_user.last_level = self.id_level + 1
 
 ######################## TODO: STATS ########################
-    #TODO: AFFICHER LES STATS
+    # TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
+        self.getAllStats()
+
     
-    #TODO: SAUVEGARDER LA MANCHE A LA FIN
-    #TODO:
+    # TODO: SAUVEGARDER LA MANCHE A LA FIN
+    def insertLevelInDatabase(self) :
+        """ Insertion du level en base de donnée """
+        stats_data = {
+            'level': self.connected_user.last_level,
+            'attempts': self.nb_coup,
+            'bet': self.mise,
+            'profit': self.gain,
+            'result': self.statusLevel
+            # Ajouter le nb_python qu'il fallait trouver
+        }
+        new_stats = self.stats_controller.createStats(self.connected_user.user_id, stats_data)
+
+    def getAllStats(self):
+        """ Récupère l'historique des parties de l'USER """
+        level_history = self.stats_controller.getStatsByUser(self.connected_user.user_id)
+        for level in level_history:
+            print(level.profit)

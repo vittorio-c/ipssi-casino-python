@@ -132,7 +132,7 @@ class Scenario :
 
     @staticmethod
     def tooPoorMessage() :
-        print(TextColor.ColorText('-\t Désolé, mais votre solde est insuffisant.\n', 'RED'))
+        print(TextColor.ColorText('\t- Désolé, mais votre solde est insuffisant.\n', 'RED'))
 
     @staticmethod
     def finishedMessage() :

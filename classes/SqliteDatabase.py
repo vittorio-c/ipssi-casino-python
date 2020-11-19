@@ -1,5 +1,4 @@
 import sqlite3
-import sys
 from sqlite3 import Error as DatabaseError
 from .User import User
 from .Stat import Stat
@@ -49,14 +48,14 @@ class SqliteDatabase :
         try:
             cursor = self.connexion.cursor()
             cursor.execute(sql_create_user_table)
-        except DatabaseError as e:
             cursor.execute(sql_create_stats_table)
+        except DatabaseError as e:
             raise e
 
     def createUser(self, user_name):
         bindings = tuple([user_name])
 
-        sql = ''' INSERT INTO users(user_name)
+        sql = ''' INSERT INTO users (user_name)
                   VALUES(?) '''
 
         try:
@@ -135,7 +134,7 @@ class SqliteDatabase :
     def createStats(self, stats_model):
         bindings = stats_model.__dict__
 
-        sql = ''' INSERT INTO stats(user_id, level, attempts, bet, profit, result)
+        sql = ''' INSERT INTO stats (user_id, level, attempts, bet, profit, result)
                   VALUES(:user_id, :level, :attempts, :bet, :profit, :result) '''
 
         try:
