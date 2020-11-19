@@ -4,7 +4,6 @@ from random import randint
 from classes.Controllers.UserController import UserController
 from classes.Controllers.StatsController import StatsController
 from .Service import Service
-import sys
 
 class Game :
     """ Contient la logique du JEU """
