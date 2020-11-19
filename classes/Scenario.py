@@ -22,7 +22,7 @@ class Scenario :
 
     @staticmethod
     def askMise() :
-        mise = input(TextColor.ColorText('\t- Le jeu commence, entrez votre mise : ?\n', 'MAGENTA'))
+        mise = input(TextColor.ColorText('\t- Le jeu commence, entrez votre mise : ?\n', 'YELLOW'))
         return mise
 
     @staticmethod
@@ -33,7 +33,7 @@ class Scenario :
 
     @staticmethod
     def askLevel(level_max):
-        user_level = input("\t- Veuillez choisir le level entre 1 et " + str(level_max) +" s'il vous plaît :\n")
+        user_level = input(TextColor.ColorText("\t- Veuillez choisir le level entre 1 et " + str(level_max) +" s'il vous plaît :\n", 'YELLOW'))
         return user_level
 
     @staticmethod
@@ -75,7 +75,7 @@ class Scenario :
 
     @staticmethod
     def askNumber() :
-        number = input("\t- Alors mon nombre est : ?\n")
+        number = input(TextColor.ColorText("\t- Alors mon nombre est : ?\n",'YELLOW'))
         return number
 
     @staticmethod
@@ -86,11 +86,7 @@ class Scenario :
 
     @staticmethod
     def askNewTry() :
-        return "\t- Souhaitez-vous continuer la partie (O/N) ?\n"
-
-    @staticmethod
-    def askNumberToUser() :
-        return "\t- Alors mon nombre est : ?\n"
+        return TextColor.ColorText("\t- Souhaitez-vous continuer la partie (O/N) ?\n", 'YELLOW')
 
     @staticmethod
     def timeoutMessage(nb_try) :
@@ -99,7 +95,8 @@ class Scenario :
 
     @staticmethod
     def notUnderstandMessage(nb_max) :
-        print(TextColor.ColorText("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(nb_max),  'RED'))
+        print(TextColor.ColorText("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(nb_max),
+            'RED'))
 
     @staticmethod
     def clueMessageIsInferior() :
