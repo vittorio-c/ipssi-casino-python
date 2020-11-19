@@ -2,6 +2,7 @@ import sqlite3
 import sys
 from sqlite3 import Error as DatabaseError
 from .User import User
+from .Stat import Stat
 
 class SqliteDatabase :
     """ Permet de créer la connexion et les interractions avec la base de données """
@@ -25,17 +26,31 @@ class SqliteDatabase :
 
     def createTables(self):
         sql_create_user_table = """ CREATE TABLE IF NOT EXISTS users (
-                                        id INTEGER PRIMARY KEY,
+                                        id INTEGER PRIMARY KEY NOT NULL,
                                         user_name VARCHAR(64) NOT NULL,
                                         is_first_time TINYINT DEFAULT 1,
                                         last_level TINYINT DEFAULT 1,
                                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                                         solde INTEGER DEFAULT 10
                                     ); """
+
+        sql_create_stats_table = """ CREATE TABLE IF NOT EXISTS stats (
+                                        id INTEGER PRIMARY KEY NOT NULL,
+                                        user_id INTEGER NOT NULL,
+                                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                        level TINYINT NOT NULL,
+                                        attempts INT NOT NULL,
+                                        bet INT,
+                                        profit INT,
+                                        result TINYINT NOT NULL,
+                                        FOREIGN KEY (user_id) REFERENCES users (id)
+                                    ); """
+
         try:
             cursor = self.connexion.cursor()
             cursor.execute(sql_create_user_table)
         except DatabaseError as e:
+            cursor.execute(sql_create_stats_table)
             raise e
 
     def createUser(self, user_name):
@@ -116,3 +131,63 @@ class SqliteDatabase :
             user_model = None
 
         return user_model
+
+    def createStats(self, stats_model):
+        bindings = stats_model.__dict__
+
+        sql = ''' INSERT INTO stats(user_id, level, attempts, bet, profit, result)
+                  VALUES(:user_id, :level, :attempts, :bet, :profit, :result) '''
+
+        try:
+            cursor = self.connexion.cursor()
+            cursor.execute(sql, bindings)
+            self.connexion.commit()
+
+            statId = cursor.lastrowid
+        except DatabaseError as e:
+            print(e)
+
+        return self.getStatById(statId)
+
+    def getStatById(self, stat_id):
+        bindings = tuple([stat_id])
+
+        sql = ''' SELECT * FROM stats WHERE stats.id = ? '''
+
+        try:
+            cursor = self.connexion.cursor()
+            cursor.execute(sql, bindings)
+
+            stats_row = cursor.fetchone()
+        except DatabaseError as e:
+            print(e)
+
+        stat_id, user_id, created_at, level, attempts, bet, profit, result = list(stats_row)
+
+        stat_model = Stat(user_id, level, attempts, bet, profit, result, created_at, stat_id)
+        return stat_model
+
+    def getStatsByUserId(self, user_id) :
+        bindings = tuple([user_id])
+
+        sql = ''' SELECT * FROM stats WHERE stats.user_id = ? '''
+
+        try:
+            cursor = self.connexion.cursor()
+            cursor.execute(sql, bindings)
+
+            stats_rows = cursor.fetchall()
+        except DatabaseError as e:
+            print(e)
+
+        results = []
+
+        for row in stats_rows:
+            stat_id, user_id, created_at, level, attempts, bet, profit, result = list(row)
+
+            stat_model = Stat(user_id, level, attempts, bet, profit, result, created_at, stat_id)
+
+            results.append(stat_model)
+
+        return results
+

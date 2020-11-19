@@ -1,9 +1,10 @@
 from .Scenario import Scenario
 from .ConfigurationLevel import ConfigurationLevel
-from .User import User
 from random import randint
-from .Controller import Controller
+from classes.Controllers.UserController import UserController
+from classes.Controllers.StatsController import StatsController
 from .Service import Service
+import sys
 
 class Game :
     """ Contient la logique du JEU """
@@ -17,8 +18,8 @@ class Game :
     mise = None
     gain = None
     solde = None
-    controller = None
-
+    user_controller = None
+    stats_controller = None
 
     def __init__(self) :
         self.list_level = [
@@ -27,8 +28,9 @@ class Game :
             ConfigurationLevel(3, 7, 30),
         ]
         self.time_interval = 10 # secondes
-        self.controller = Controller()
+        self.user_controller = UserController()
         self.id_level = 0
+        self.stats_controller = StatsController()
 
     def run(self) :
         """ Execution du jeu """
@@ -45,20 +47,20 @@ class Game :
             status = self.hasEnoughTry()
             self.resetProperties()
         self.handleStatusGame(status)
-        self.controller.updateUser(self.connected_user)
-            
+        self.user_controller.updateUser(self.connected_user)
+
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
-        user = self.controller.getUserByName(user_name)
+        user = self.user_controller.getUserByName(user_name)
 
         if user is None :
-            user = self.controller.createUser(user_name)
+            user = self.user_controller.createUser(user_name)
 
         return user
 
     def checkUserProgression(self, user_name) :
         """ Vérifier son dernier niveau """
-        user = self.controller.getUserByName(user_name)
+        user = self.user_controller.getUserByName(user_name)
         return user.last_level
 
     def askLevel(self) :
@@ -192,13 +194,13 @@ class Game :
         return False
 
     def checkChoiceUser(self, inputUser) :
-        if inputUser == '' or inputUser.lower() == 'n': 
+        if inputUser == '' or inputUser.lower() == 'n':
             return 'quit'
         if inputUser.lower() == 'o':
             return 'continue'
         return 0
 
-    def getGainWin(self) : 
+    def getGainWin(self) :
         self.list_level[self.id_level].generateArrayGain(self.mise)
         self.gain = self.list_level[self.id_level].gain[str(self.id_level + 1)][str(self.nb_coup)]
 
@@ -219,7 +221,7 @@ class Game :
             if(self.hasWin()) :
                 return self.inCaseUserWin()
         return self.inCaseUserLoose()
-    
+
     def handleStatusGame(self, status) :
         """ Gère les différentes fin du jeu """
         if(status == 'quit') :
@@ -236,4 +238,3 @@ class Game :
         self.nb_coup = 0
         self.mise = None
         self.gain = None
-

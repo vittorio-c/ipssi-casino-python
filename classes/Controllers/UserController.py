@@ -1,8 +1,8 @@
-from .SqliteDatabase import SqliteDatabase
-from .User import User
+from classes.SqliteDatabase import SqliteDatabase
+from classes.User import User
 
-class Controller :
-    """ Permet de récupérer des éléments spécifiques depuis la base de données """
+class UserController :
+    """ Permet de réaliser des opérations sur les users"""
 
     database = None
 
@@ -24,20 +24,14 @@ class Controller :
             if not isinstance(user_model, User) :
                 raise TypeError()
 
-            self.checkUserData(user_model)
+            self.validateUserData(user_model)
             return self.database.updateUser(user_model)
-        except:
+        except (TypeError, ValueError) as e:
             print('Sorry, we could not update the user.')
+            print(e)
 
-    # TODO A voir plus tard pour les stats
-    def getStatsByName(self, name) :
-        """ Récupère les stats via le nom du user depuis la base de données"""
-
-    def setStat(self, name) :
-        """ Insert une stat en base de données à partir du nom du user """
-
-    def checkUserData(self, user_model) :
-        """ Check les datas avant insertion en database """
+    def validateUserData(self, user_model) :
+        """ Vérifie les datas avant insertion en database """
         user_data = user_model.__dict__
 
         try :
