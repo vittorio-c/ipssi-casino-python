@@ -2,3 +2,4 @@
 /test.py
 .sqlite_database.db
 /.vscode
+/classes/Controllers/__pycache__
