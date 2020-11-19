@@ -20,6 +20,16 @@ class Scenario :
         return user_name
 
     @staticmethod
+    def askLevel(level_max):
+        user_level = input("Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        return user_level
+
+    @staticmethod
+    def wrongLevel(level_max):
+        user_level = input("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        return user_level
+
+    @staticmethod
     def showIntervalNumber(level) :
         print(TextColor.ColorText('\t- Je viens de penser à un nombre entre ' +
             TextColor.ColorText('1 et ' + str(level.interval), 'YELLOW', 'MAGENTA') + '. Devinez lequel ?\n', 'MAGENTA'))
@@ -63,6 +73,23 @@ class Scenario :
             TextColor.ColorText('1 et ' + level.interval, 'YELLOW') + ' : \n')
         return number
       
+    @staticmethod
+    def askNewTry() :
+        return "\t- Souhaitez-vous continuer la partie (O/N) ?\n"
+
+    @staticmethod
+    def askNumberToUser() :
+        return "\t- Alors mon nombre est : ?\n"
+
+    @staticmethod
+    def timeoutMessage(nb_try) :
+        print("\t- Vous avez dépassé le délai de 10 secondes ! Vous perdez l'essai courant\n\t\t\t et il vous reste {} essai(s) !\n".format(nb_try))
+
+    @staticmethod
+    def notUnderstandMessage(nb_max) :
+        print("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(nb_max))
+
+    @staticmethod
     def clueMessageIsInferior() :
         print('\t- Votre nbre est ' + TextColor.ColorText('trop grand', 'YELLOW') + ' !\n')
 
