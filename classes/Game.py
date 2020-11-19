@@ -116,7 +116,7 @@ class Game :
         user_number = ''
         isCorrect = False
         while (self.list_level[self.id_level].nb_try != self.nb_coup) and not isCorrect :
-            user_number = Service.delay10SecondesInput(Scenario.askNumberToUser())
+            user_number = Service.delay10SecondesInput(Scenario.askNumber())
             isCorrect = self.isCorrectNumberValue(user_number)
         self.nb_user = int(user_number) if isCorrect else ''
 
