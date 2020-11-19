@@ -40,7 +40,6 @@ class Game :
             self.resetProperties()
         self.handleStatusGame(status)
             
-        
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
         controller = Controller()
