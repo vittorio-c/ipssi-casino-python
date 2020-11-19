@@ -44,8 +44,9 @@ class Game :
             self.generateRandomNumber()
             status = self.hasEnoughTry()
             self.resetProperties()
+            self.updateLocalUser()
+            self.controller.updateUser(self.connected_user)
         self.handleStatusGame(status)
-        self.controller.updateUser(self.connected_user)
             
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
@@ -237,3 +238,7 @@ class Game :
         self.mise = None
         self.gain = None
 
+    def updateLocalUser(self) :
+        """ Mise à jour les propriétés de la classe USER avant insertion dans la base de données """
+        self.connected_user.is_first_time = False
+        self.connected_user.last_level = self.id_level + 1
