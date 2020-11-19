@@ -187,12 +187,36 @@ class Game :
         return 'error'
         
     #TODO: Si on gagne, lancer le compteur de 10 secondes, quitter par défaut
-        #? Choix : Rejouer, et il redescend d'un level ?
+        #? Choix : Rejouer, et il passe d'un level ?
         #? Choix : Quitter ?
         #? Est ce que l'on est au level max ?
         #? Combien a-t-il gagné (GESTION DES GAINS)
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
+        self.solde = self.solde + self.gain
+        self.id_level = self.id_level + 1
+        if self.isLevelMaxReached():
+            return 0
+        print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
+        while True:
+            inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
+            checkInput = self.checkChoiceUser(inputUser)
+            if checkInput == -1:
+                return -1
+            elif checkInput == 1:
+                return 1
+
+    def isLevelMaxReached(self) :
+        if self.id_level == len(self.list_level):
+            return True
+        return False
+
+    def checkChoiceUser(self, inputUser) :
+        if inputUser == '' or inputUser.lower() == 'n': 
+            return -1
+        if inputUser.lower() == 'o':
+            return 1
+        return 0
 
     #TODO: AFFICHER LES STATS
     def showUserStats(self) :
