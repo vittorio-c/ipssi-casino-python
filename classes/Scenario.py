@@ -75,8 +75,7 @@ class Scenario :
 
     @staticmethod
     def askNumber() :
-        number = input(TextColor.ColorText("\t- Alors mon nombre est : ?\n",'YELLOW'))
-        return number
+        return TextColor.ColorText("\t- Alors mon nombre est : ?\n",'YELLOW')
 
     @staticmethod
     def wrongNumberMessage(level) :
