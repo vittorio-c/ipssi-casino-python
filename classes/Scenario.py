@@ -26,7 +26,8 @@ class Scenario :
 
     @staticmethod
     def miseInvalid(montant_max) :
-        mise = input(TextColor.ColorText('\t- Le montant saisi n\'est pas valide. Entrer SVP un montant entre 1 et ' + str(montant_max) + ' € :  ?\n ', 'MAGENTA'))
+        mise = input(TextColor.ColorText('\t- Le montant saisi n\'est pas valide. Entrer SVP un montant entre 1 et ' +
+            str(montant_max) + ' € :  ?\n ', 'RED'))
         return mise
 
     @staticmethod
@@ -36,13 +37,14 @@ class Scenario :
 
     @staticmethod
     def wrongLevel(level_max):
-        user_level = input("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        user_level = input(TextColor.ColorText("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et" +
+            level_max + "s'il vous plaît",'RED'))  
         return user_level
 
     @staticmethod
     def showIntervalNumber(level) :
         print(TextColor.ColorText('\t- Je viens de penser à un nombre entre ' +
-            TextColor.ColorText('1 et ' + str(level.interval), 'YELLOW', 'MAGENTA') + '. Devinez lequel ?\n', 'MAGENTA'))
+            TextColor.ColorText('1 et ' + str(level.interval), 'YELLOW', 'MAGENTA') + '.\n', 'MAGENTA'))
 
     @staticmethod
     def askShowRules(level) :
@@ -77,8 +79,8 @@ class Scenario :
     
     @staticmethod
     def wrongNumberMessage(level) :
-        number = input('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' + 
-            TextColor.ColorText('1 et ' + level.interval, 'YELLOW') + ' : \n')
+        number = input(TextColor.ColorText('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' + 
+            TextColor.ColorText('1 et ' + level.interval, 'YELLOW', 'RED') + ' : \n', 'RED'))
         return number
       
     @staticmethod
@@ -91,11 +93,12 @@ class Scenario :
 
     @staticmethod
     def timeoutMessage(nb_try) :
-        print("\t- Vous avez dépassé le délai de 10 secondes ! Vous perdez l'essai courant\n\t\t\t et il vous reste {} essai(s) !\n".format(nb_try))
+        print(TextColor.ColorText("\t- Vous avez dépassé le délai de 10 secondes ! " +
+            "Vous perdez l'essai courant\n\tet il vous reste {} essai(s) !\n".format(nb_try),'RED'))
 
     @staticmethod
     def notUnderstandMessage(nb_max) :
-        print("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(nb_max))
+        print(TextColor.ColorText("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(nb_max),  'RED'))
 
     @staticmethod
     def clueMessageIsInferior() :
@@ -110,13 +113,26 @@ class Scenario :
         print('\t- Il vous reste ' + TextColor.ColorText('une chance', 'RED') + ' !\n')
 
     @staticmethod
-    def winMessage(nb_coup, gain) :
-        print('\t- Bingo René, vous avez gagné ' + TextColor.ColorText('en "'+ str(nb_coup) +'" coup(s)', 'YELLOW')
+    def winMessage(user_name,nb_coup, gain) :
+        print('\t- Bingo ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
+            ', vous avez gagné ' + TextColor.ColorText('en "'+ str(nb_coup) +'" coup(s)', 'YELLOW')
         + ' et vous avez emporté ' + TextColor.ColorText('"'+ str(gain) +'" €', 'YELLOW')+ ' !\n')
 
     @staticmethod
     def looseMessage(number_python) :
-        print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
-        '" !\n ', 'RED'))
-        
-    # ...
+        print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "' +
+            TextColor.ColorText(str(number_python), 'YELLOW', 'RED') + '" !\n ', 'RED'))
+    
+    @staticmethod
+    def quitMessage(solde) :
+        print(TextColor.ColorText('-\tAu revoir ! Vous finissez la partie avec "' +
+            TextColor.ColorText(str(solde), 'GREEN', 'RED') + '" €.\n', 'RED'))
+
+    @staticmethod
+    def tooPoorMessage() :
+        print(TextColor.ColorText('-\tDésolé, mais votre solde est insuffisant.\n', 'RED'))
+
+
+    @staticmethod
+    def finishedMessage() :
+        print(TextColor.ColorText('-\tNous vous remercions pour votre fidélité !\n', 'RED'))
