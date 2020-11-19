@@ -17,8 +17,8 @@ class Scenario :
     @staticmethod
     def sayHi(user_name, solde) :
         print(TextColor.ColorText('\n\t- Hello ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
-            ', vous avez ' + TextColor.ColorText(str(solde), 'YELLOW', 'MAGENTA') +
-            '€, Très bien ! Installez vous SVP à la table de pari.\n\tJe vous expliquerai le principe du jeu : \n', 'MAGENTA'))
+            ', vous avez ' + TextColor.ColorText(str(solde) + '€', 'YELLOW', 'MAGENTA') +
+            ', Très bien ! Installez vous SVP à la table de pari.\n\tJe vous expliquerai le principe du jeu : \n', 'MAGENTA'))
 
     @staticmethod
     def askMise() :
@@ -33,13 +33,13 @@ class Scenario :
 
     @staticmethod
     def askLevel(level_max):
-        user_level = input("Veuillez choisir le level entre 1 et " + str(level_max) +" s'il vous plaît : ")
+        user_level = input("\t- Veuillez choisir le level entre 1 et " + str(level_max) +" s'il vous plaît :\n")
         return user_level
 
     @staticmethod
     def wrongLevel(level_max):
-        user_level = input(TextColor.ColorText("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et" +
-            str(level_max) + "s'il vous plaît",'RED'))
+        user_level = input(TextColor.ColorText("\t- Le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et " +
+            str(level_max) + " s'il vous plaît\n",'RED'))
         return user_level
 
     @staticmethod
@@ -126,13 +126,18 @@ class Scenario :
     
     @staticmethod
     def quitMessage(solde) :
-        print(TextColor.ColorText('-\tAu revoir ! Vous finissez la partie avec "' +
+        print(TextColor.ColorText('\t- Au revoir ! Vous finissez la partie avec "' +
             TextColor.ColorText(str(solde), 'GREEN', 'RED') + '" €.\n', 'RED'))
 
     @staticmethod
     def tooPoorMessage() :
-        print(TextColor.ColorText('-\tDésolé, mais votre solde est insuffisant.\n', 'RED'))
+        print(TextColor.ColorText('-\t Désolé, mais votre solde est insuffisant.\n', 'RED'))
 
     @staticmethod
     def finishedMessage() :
-        print(TextColor.ColorText('-\tNous vous remercions pour votre fidélité !\n', 'RED'))
+        print(TextColor.ColorText('-\t Nous vous remercions pour votre fidélité !\n', 'RED'))
+
+    @staticmethod
+    def nextLevel(level) :
+        print("\t- Super ! Vous passez au Level {}.\n".format(str(level)))
+
