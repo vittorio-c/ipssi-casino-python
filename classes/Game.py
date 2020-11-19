@@ -36,6 +36,7 @@ class Game :
         self.askMise()
         self.generateRandomNumber()
         self.askUserNumber()
+        self.
         
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
@@ -125,21 +126,21 @@ class Game :
         self.nb_coup = self.nb_coup + 1
         return True
 
-    def hasWin(self, number) :
+    def hasWin(self) :
         """ Retourne si le USER a gagner """
-        comparison = self.compareNumberUser(number)
+        comparison = self.compareNumberUser()
         if (comparison == 'equal') :
             return True
         else :
             return False
 
 
-    def compareNumberUser(self, number) :
+    def compareNumberUser(self) :
         """ Compare la valeur du USER par rapport à la réponse, donne des indications au USER"""
-        if (number > self.nb_python) :
+        if (self.nb_user > self.nb_python) :
             Scenario.clueMessageIsInferior()
             return 'superior'
-        elif (number < self.nb_python) :
+        elif (self.nb_user < self.nb_python) :
             Scenario.clueMessageIsSuperior()
             return 'inferior'
         else :
