@@ -7,7 +7,7 @@ class Scenario :
     @staticmethod
     def launchGame() :
         print(TextColor.ColorText('\n**********************************************************', 'MAGENTA'))
-            
+
     @staticmethod
     def askUsername() :
         user_name = input(TextColor.ColorText('\t- Je suis ' + TextColor.ColorText('Python', 'YELLOW', 'MAGENTA') +
@@ -16,17 +16,17 @@ class Scenario :
         print(TextColor.ColorText('\n\t- Hello ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
             ', vous avez ' + TextColor.ColorText('10 €', 'YELLOW', 'MAGENTA') +
             ', Très bien ! Installez vous SVP à la table de pari.\n\tJe vous expliquerai le principe du jeu : \n', 'MAGENTA'))
-        
+
         return user_name
 
     @staticmethod
     def askLevel(level_max):
-        user_level = input("Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        user_level = input("Veuillez choisir le level entre 1 et " + str(level_max) +" s'il vous plaît : ")
         return user_level
 
     @staticmethod
     def wrongLevel(level_max):
-        user_level = input("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        user_level = input("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et " + str(level_max) +" s'il vous plaît : ")
         return user_level
 
     @staticmethod
@@ -37,15 +37,15 @@ class Scenario :
     @staticmethod
     def askShowRules(level) :
         show_rules = input(TextColor.ColorText('\t- Souhaitez-vous connaitre les règles ?(O/N) \n ', 'YELLOW'))
-        
+
         Scenario.showIntervalNumber(level)
-        
+
         if (show_rules.casefold() == 'o') :
             Scenario.rules(level)
 
     @staticmethod
     def rules(level) :
-        print(TextColor.ColorText('\t- Attention : vous avez le droit à ' + 
+        print(TextColor.ColorText('\t- Attention : vous avez le droit à ' +
             TextColor.ColorText(str(level.nb_try),'RED','GREEN') + ' essais !\n', 'GREEN'))
         print(TextColor.ColorText('\t- Si vous devinez mon nombre dès ' +
             TextColor.ColorText('au premier coup', 'YELLOW', 'GREEN') + ', vous gagnez le double de votre mise !\n', 'GREEN'))
@@ -66,13 +66,13 @@ class Scenario :
     def askNumber() :
         number = input("\t- Alors mon nombre est : ?\n")
         return number
-    
+
     @staticmethod
     def wrongNumberMessage(level) :
-        number = input('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' + 
+        number = input('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' +
             TextColor.ColorText('1 et ' + level.interval, 'YELLOW') + ' : \n')
         return number
-      
+
     @staticmethod
     def askNewTry() :
         return "\t- Souhaitez-vous continuer la partie (O/N) ?\n"
@@ -110,5 +110,5 @@ class Scenario :
     def looseMessage(number_python) :
         print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
         '" !\n ' + TextColor.ColorText('trop petit', 'YELLOW', 'RED') + ' !\n', 'RED'))
-        
+
     # ...

@@ -1,6 +1,6 @@
 import sqlite3
 import sys
-from sqlite3 import Error
+from sqlite3 import Error as DatabaseError
 from .User import User
 
 class SqliteDatabase :
@@ -17,7 +17,7 @@ class SqliteDatabase :
             self.connexion = sqlite3.connect(self.database_file_name)
             self.connexion.row_factory = sqlite3.Row
             self.createTables()
-        except Error as e:
+        except DatabaseError as e:
             print(e)
 
     def getConnection(self):
@@ -35,7 +35,7 @@ class SqliteDatabase :
         try:
             cursor = self.connexion.cursor()
             cursor.execute(sql_create_user_table)
-        except Error as e:
+        except DatabaseError as e:
             raise e
 
     def createUser(self, user_name):
@@ -52,10 +52,31 @@ class SqliteDatabase :
             self.connexion.commit()
 
             userId = cursor.lastrowid
-        except Error as e:
+        except DatabaseError as e:
             print(e)
 
         return self.getUserById(userId)
+
+    def updateUser(self, user_model):
+        bindings = user_model.__dict__
+
+        sql = '''
+                UPDATE users
+                SET
+                    user_name = :user_name,
+                    is_first_time = :is_first_time,
+                    last_level = :last_level,
+                    solde = :solde
+                WHERE id = :user_id
+              '''
+        try:
+            cursor = self.connexion.cursor()
+            cursor.execute(sql, bindings)
+            self.connexion.commit()
+        except DatabaseError as e:
+            print(e)
+
+        return self.getUserById(bindings['user_id'])
 
     def getUserById(self, user_id):
         bindings = tuple([user_id])
@@ -67,7 +88,7 @@ class SqliteDatabase :
             cursor.execute(sql, bindings)
 
             user_row = cursor.fetchone()
-        except Error as e:
+        except DatabaseError as e:
             print(e)
 
         user_id, user_name, is_first_time, last_level, created_at, solde = list(user_row)
@@ -85,7 +106,7 @@ class SqliteDatabase :
             cursor.execute(sql, bindings)
 
             user_row = cursor.fetchone()
-        except Error as e:
+        except DatabaseError as e:
             print(e)
 
         if user_row is not None:

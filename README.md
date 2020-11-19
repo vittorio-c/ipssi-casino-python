@@ -49,6 +49,7 @@ UserController :
 # groupes
 
 1 groupe de 3
+
 A :
 - Mouhamadou
 - Wissem
@@ -56,7 +57,7 @@ A :
 
 2 groupe de 2
 
-B : 
+B :
 - Sébastien
 - Narcisse
 
@@ -64,6 +65,15 @@ C :
 - Brandon
 - Raïd
 
+# Update user API
+
+Exemples pour update user depuis `Game.py` :
+
+```
+self.connected_user.user_name = user_name_updated
+self.connected_user.solde = 456
+self.controller.updateUser(self.connected_user)
+```
 
 
 

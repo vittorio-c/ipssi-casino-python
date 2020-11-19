@@ -19,6 +19,7 @@ class Game :
     dotations = None
     gain = None
     solde = None
+    controller = None
 
     def __init__(self) :
         self.list_level = [
@@ -27,49 +28,54 @@ class Game :
             ConfigurationLevel(3, 7, 30),
         ]
         self.time_interval = 10 # secondes
+        self.controller = Controller()
+        self.id_level = 0
 
     def run(self) :
         """ Execution du jeu """
         Scenario.launchGame()
         user_name = Scenario.askUsername()
+        self.connected_user = self.getUser(user_name)
+
+        if self.connected_user.last_level > 1 :
+            self.askLevel()
+
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
 
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
-        controller = Controller()
-        user = controller.getUserByName(user_name)
-        if user:
-            if user.last_level > 1:
-                self.selectLevel()
-        else:
-            user= controller.createUser(user_name)   
-        return user  
+        user = self.controller.getUserByName(user_name)
+
+        if user is None :
+            user = self.controller.createUser(user_name)
+
+        return user
 
     def checkUserProgression(self, user_name) :
         """ Vérifier son dernier niveau """
-        controller = Controller()
-        user = controller.getUserByName(user_name)
-        return user.last_level 
+        user = self.controller.getUserByName(user_name)
+        return user.last_level
 
     def askLevel(self) :
         """ Selectionne un niveau """
         if not self.connected_user.is_first_time :
             user_level = Scenario.askLevel(self.connected_user.last_level)
+
             while not self.isCorrectLevel(user_level):
                 user_level = Scenario.wrongLevel(self.connected_user.last_level)
-            self.id_level = user_level-1
+
+            self.id_level = int(user_level) - 1
         else:
             self.id_level = 0
 
-    def isCorrectLevel(self,level):
+    def isCorrectLevel(self, level):
         """Vérifie le level entré par l'user"""
         try:
-            int(level)
-            if level > 0 or level <= self.connected_user.last_level:
+            if int(level) > 0 and int(level) <= self.connected_user.last_level:
                 return True
             else:
-                return False    
-        except:
+                return False
+        except ValueError as e :
             return False
 
     def askMise(self) :
@@ -101,7 +107,7 @@ class Game :
 
     def checkNumberValue(self, number_value) :
         """ Vérifie le nombre """
-        if number_value == '': 
+        if number_value == '':
             self.nb_coup = self.nb_coup + 1
             return "Delai depasse"
         if number_value.isdigit() == False:
@@ -136,7 +142,7 @@ class Game :
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
         Scenario.looseMessage(self.nb_python)
-        while True:         
+        while True:
             inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
             checkInput = self.checkCaseUserLoose(inputUser)
             if checkInput == 'quit':
@@ -148,12 +154,12 @@ class Game :
 
     def checkCaseUserLoose(self, inputUser) :
         """ Check la réponse de l'user """
-        if inputUser == '' or inputUser.lower == 'n': 
+        if inputUser == '' or inputUser.lower == 'n':
             return 'quit'
         if inputUser.lower == 'o':
             return 'continue'
         return 'error'
-        
+
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
         self.id_level = self.id_level + 1
@@ -175,13 +181,13 @@ class Game :
         return False
 
     def checkChoiceUser(self, inputUser) :
-        if inputUser == '' or inputUser.lower() == 'n': 
+        if inputUser == '' or inputUser.lower() == 'n':
             return -1
         if inputUser.lower() == 'o':
             return 1
         return 0
 
-    def getGainWin(self) : 
+    def getGainWin(self) :
         return self.list_level[self.id_level - 1].gain[str(self.id_level)][str(self.nb_coup)]
 
     def hasSolde(self) :
