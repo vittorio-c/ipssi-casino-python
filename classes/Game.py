@@ -177,9 +177,9 @@ class Game :
         Scenario.winMessage(self.connected_user.user_name, self.nb_coup , self.gain)
         if not self.isLevelMaxReached():
             self.id_level += 1
-            print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
+            Scenario.nextLevel(str(self.id_level + 1))
             while True:
-                inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
+                inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
                 checkInput = self.checkChoiceUser(inputUser)
                 if checkInput == 'quit':
                     return 'quit'

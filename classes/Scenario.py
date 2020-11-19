@@ -136,3 +136,8 @@ class Scenario :
     @staticmethod
     def finishedMessage() :
         print(TextColor.ColorText('-\t Nous vous remercions pour votre fidélité !\n', 'RED'))
+
+    @staticmethod
+    def nextLevel(level) :
+        print("\t- Super ! Vous passez au Level {}.\n".format(str(level)))
+
