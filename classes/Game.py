@@ -1,6 +1,7 @@
 from .Scenario import Scenario
 from .ConfigurationLevel import ConfigurationLevel
 from .User import User
+from .Controller import Controller
 from .Service import Service
 
 class Game :
@@ -34,17 +35,48 @@ class Game :
 ######################################## TODO: ##########################################
 
     # Todo: Implémenter la recupération du USER s'il a deja joué sinon en créer un
-    def getUser(self) :
+    def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
+        controller = Controller()
+        user = controller.getUserByName(user_name)
+        if user:
+            if user.last_level > 1:
+                self.selectLevel()
+        else:
+            user= controller.createUser(user_name)   
+        return user  
 
     #TODO: Determiner si première partie ou non
         #TODO: Choisir le level
-    def checkUserProgression(self) :
+    def checkUserProgression(self, user_name) :
         """ Vérifier son dernier niveau """
+        controller = Controller()
+        user = controller.getUserByName(user_name)
+        return user.last_level 
 
-    def selectLevel(self, level) :
+    def askLevel(self) :
         """ Selectionne un niveau """
+        if not self.connected_user.is_first_time :
+            user_level = Scenario.askLevel(self.connected_user.last_level)
+            while not self.isCorrectLevel(user_level):
+                user_level = Scenario.wrongLevel(self.connected_user.last_level)
+            self.id_level = user_level-1
+        else:
+            self.id_level = 0
 
+    def isCorrectLevel(self,level):
+        """Vérifie le level entré par l'user"""
+        try:
+            int(level)
+            if level > 0 or level <= self.connected_user.last_level:
+                return True
+            else:
+                return False    
+        except:
+            return False
+
+
+             
     #TODO: Demander la mise
         #TODO: Check mise
         #? Est que c'est un int
@@ -59,7 +91,6 @@ class Game :
     #TODO: Tirer un nombre au hasard
     def generateRandomNumber(self, max) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
-
     #TODO: Recuperer le nombre de l'USER
         #TODO: Check le nombre
     def askUserNumber(self) :
