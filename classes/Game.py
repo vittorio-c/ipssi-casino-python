@@ -9,12 +9,11 @@ class Game :
     """ Contient la logique du JEU """
 
     connected_user = None
-    level = []
     id_level = None
     nb_python = None
     nb_user = None
     nb_coup = 0
-    list_level = None
+    list_level = []
     mise = None
     gain = None
     solde = None
@@ -41,11 +40,15 @@ class Game :
             self.askLevel()
 
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
+        status = 'continue'
         self.askLevel()
-        self.askMise()
-        self.generateRandomNumber()
-        self.hasEnoughTry()
-        
+        while (self.hasSolde() and status == 'continue' ) :
+            self.askMise()
+            self.generateRandomNumber()
+            status = self.hasEnoughTry()
+            self.resetProperties()
+        self.handleStatusGame(status)
+            
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
         user = self.controller.getUserByName(user_name)
@@ -140,7 +143,6 @@ class Game :
         else :
             return False
 
-
     def compareNumberUser(self) :
         """ Compare la valeur du USER par rapport à la réponse, donne des indications au USER"""
         if (self.nb_user == '') :
@@ -157,6 +159,8 @@ class Game :
     def inCaseUserLoose(self) :
         """ Dans le cas où le user perd son level """
         Scenario.looseMessage(self.nb_python)
+        if (not self.hasSolde()) :
+            return 'tooPoor'
         while True:
             inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
             checkInput = self.checkChoiceUser(inputUser)
@@ -171,7 +175,7 @@ class Game :
         """ Dans le cas où le user gagne son level """
         self.getGainWin()
         self.connected_user.solde += self.gain
-        Scenario.winMessage(self.nb_coup , self.gain)
+        Scenario.winMessage(self.connected_user.user_name, self.nb_coup , self.gain)
         if not self.isLevelMaxReached():
             self.id_level += 1
             print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
@@ -201,7 +205,7 @@ class Game :
         self.gain = self.list_level[self.id_level].gain[str(self.id_level + 1)][str(self.nb_coup)]
 
     def hasSolde(self) :
-        if self.solde <= 0 :
+        if self.connected_user.solde <= 0 :
             return False
         else :
             return True
@@ -217,3 +221,21 @@ class Game :
             if(self.hasWin()) :
                 return self.inCaseUserWin()
         return self.inCaseUserLoose()
+    
+    def handleStatusGame(self, status) :
+        """ Gère les différentes fin du jeu """
+        if(status == 'quit') :
+            Scenario.quitMessage(self.connected_user.solde)
+        elif(status == 'tooPoor') :
+            Scenario.tooPoorMessage()
+        elif(status == 'finished') :
+            Scenario.finishedMessage()
+
+    def resetProperties(self) :
+        """ Reinitialise les propriétés de la classe GAME """
+        self.nb_python = None
+        self.nb_user = None
+        self.nb_coup = 0
+        self.mise = None
+        self.gain = None
+
