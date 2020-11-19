@@ -28,6 +28,16 @@ class Scenario :
         mise = input(TextColor.ColorText('\t- Le montant saisi n\'est pas valide. Entrer SVP un montant entre 1 et ' + montant_max + ' € :  ?\n ', 'MAGENTA'))
 
     @staticmethod
+    def askLevel(level_max):
+        user_level = input("Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        return user_level
+
+    @staticmethod
+    def wrongLevel(level_max):
+        user_level = input("le niveau choisi n'existe pas ! Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
+        return user_level
+
+    @staticmethod
     def showIntervalNumber(level) :
         print(TextColor.ColorText('\t- Je viens de penser à un nombre entre ' +
             TextColor.ColorText('1 et ' + str(level.interval), 'YELLOW', 'MAGENTA') + '. Devinez lequel ?\n', 'MAGENTA'))
@@ -60,4 +70,53 @@ class Scenario :
             TextColor.ColorText('de partir avec vos gains', 'YELLOW', 'GREEN') + ' OU \n\tde continuer le jeu en passant ' +
             TextColor.ColorText('au level supérieur', 'YELLOW', 'GREEN') + '.\n', 'GREEN'))
 
+    @staticmethod
+    def askNumber() :
+        number = input("\t- Alors mon nombre est : ?\n")
+        return number
+    
+    @staticmethod
+    def wrongNumberMessage(level) :
+        number = input('\t- Je ne comprends pas ! Entrer SVP un nombre entre ' + 
+            TextColor.ColorText('1 et ' + level.interval, 'YELLOW') + ' : \n')
+        return number
+      
+    @staticmethod
+    def askNewTry() :
+        return "\t- Souhaitez-vous continuer la partie (O/N) ?\n"
+
+    @staticmethod
+    def askNumberToUser() :
+        return "\t- Alors mon nombre est : ?\n"
+
+    @staticmethod
+    def timeoutMessage(nb_try) :
+        print("\t- Vous avez dépassé le délai de 10 secondes ! Vous perdez l'essai courant\n\t\t\t et il vous reste {} essai(s) !\n".format(nb_try))
+
+    @staticmethod
+    def notUnderstandMessage(nb_max) :
+        print("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et {} :  ?\n".format(nb_max))
+
+    @staticmethod
+    def clueMessageIsInferior() :
+        print('\t- Votre nbre est ' + TextColor.ColorText('trop grand', 'YELLOW') + ' !\n')
+
+    @staticmethod
+    def clueMessageIsSuperior() :
+        print('\t- Votre nbre est ' + TextColor.ColorText('trop petit', 'YELLOW') + ' !\n')
+
+    @staticmethod
+    def indicateLastChance() :
+        print('\t- Il vous reste ' + TextColor.ColorText('une chance', 'RED') + ' !\n')
+
+    @staticmethod
+    def winMessage(nb_coup, gain) :
+        print('\t- Bingo René, vous avez gagné ' + TextColor.ColorText('en "'+ str(nb_coup) +'" coup(s)', 'YELLOW')
+        + ' et vous avez emporté ' + TextColor.ColorText('"'+ str(gain) +'" €', 'YELLOW')+ ' !\n')
+
+    @staticmethod
+    def looseMessage(number_python) :
+        print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
+        '" !\n ' + TextColor.ColorText('trop petit', 'YELLOW', 'RED') + ' !\n', 'RED'))
+        
     # ...
