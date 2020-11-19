@@ -35,11 +35,8 @@ class Game :
         Scenario.launchGame()
         user_name = Scenario.askUsername()
         self.connected_user = self.getUser(user_name)
-
-        if self.connected_user.last_level > 1 :
-            self.askLevel()
-
-        Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
+        Scenario.sayHi(self.connected_user.user_name, self.connected_user.solde)
+        Scenario.askShowRules(self.list_level[self.id_level])
         status = 'continue'
         self.askLevel()
         while (self.hasSolde() and status == 'continue' ) :
@@ -48,6 +45,7 @@ class Game :
             status = self.hasEnoughTry()
             self.resetProperties()
         self.handleStatusGame(status)
+        self.controller.updateUser(self.connected_user)
             
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
@@ -65,7 +63,7 @@ class Game :
 
     def askLevel(self) :
         """ Selectionne un niveau """
-        if not self.connected_user.is_first_time :
+        if (not self.connected_user.is_first_time) and (self.connected_user.last_level > 1) :
             user_level = Scenario.askLevel(self.connected_user.last_level)
 
             while not self.isCorrectLevel(user_level):

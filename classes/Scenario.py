@@ -12,11 +12,13 @@ class Scenario :
     def askUsername() :
         user_name = input(TextColor.ColorText('\t- Je suis ' + TextColor.ColorText('Python', 'YELLOW', 'MAGENTA') +
          '. Quel est votre pseudo ? \n ', 'MAGENTA'))
-        
-        print(TextColor.ColorText('\n\t- Hello ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
-            ', vous avez ' + TextColor.ColorText('10 €', 'YELLOW', 'MAGENTA') +
-            ', Très bien ! Installez vous SVP à la table de pari.\n\tJe vous expliquerai le principe du jeu : \n', 'MAGENTA'))
         return user_name
+    
+    @staticmethod
+    def sayHi(user_name, solde) :
+        print(TextColor.ColorText('\n\t- Hello ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
+            ', vous avez ' + TextColor.ColorText(str(solde), 'YELLOW', 'MAGENTA') +
+            '€, Très bien ! Installez vous SVP à la table de pari.\n\tJe vous expliquerai le principe du jeu : \n', 'MAGENTA'))
 
     @staticmethod
     def askMise() :
