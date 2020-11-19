@@ -16,6 +16,9 @@ class Game :
     list_level = []
     mise = None
     gain = None
+    solde = None
+    controller = None
+
 
     def __init__(self) :
         self.list_level = [
@@ -24,12 +27,18 @@ class Game :
             ConfigurationLevel(3, 7, 30),
         ]
         self.time_interval = 10 # secondes
+        self.controller = Controller()
+        self.id_level = 0
 
     def run(self) :
         """ Execution du jeu """
         Scenario.launchGame()
         user_name = Scenario.askUsername()
         self.connected_user = self.getUser(user_name)
+
+        if self.connected_user.last_level > 1 :
+            self.askLevel()
+
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
         status = 'continue'
         self.askLevel()
@@ -42,40 +51,38 @@ class Game :
             
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
-        controller = Controller()
-        user = controller.getUserByName(user_name)
-        if user:
-            if user.last_level > 1:
-                self.selectLevel()
-        else:
-            user= controller.createUser(user_name)   
-        return user  
+        user = self.controller.getUserByName(user_name)
+
+        if user is None :
+            user = self.controller.createUser(user_name)
+
+        return user
 
     def checkUserProgression(self, user_name) :
         """ Vérifier son dernier niveau """
-        controller = Controller()
-        user = controller.getUserByName(user_name)
-        return user.last_level 
+        user = self.controller.getUserByName(user_name)
+        return user.last_level
 
     def askLevel(self) :
         """ Selectionne un niveau """
         if not self.connected_user.is_first_time :
             user_level = Scenario.askLevel(self.connected_user.last_level)
+
             while not self.isCorrectLevel(user_level):
                 user_level = Scenario.wrongLevel(self.connected_user.last_level)
-            self.id_level = user_level-1
+
+            self.id_level = int(user_level) - 1
         else:
             self.id_level = 0
 
-    def isCorrectLevel(self,level):
+    def isCorrectLevel(self, level):
         """Vérifie le level entré par l'user"""
         try:
-            int(level)
-            if level > 0 or level <= self.connected_user.last_level:
+            if int(level) > 0 and int(level) <= self.connected_user.last_level:
                 return True
             else:
-                return False    
-        except:
+                return False
+        except ValueError as e :
             return False
 
     def askMise(self) :
@@ -114,7 +121,7 @@ class Game :
 
     def isCorrectNumberValue(self, number_value) :
         """ Vérifie le nombre """
-        if number_value == '': 
+        if number_value == '':
             self.nb_coup = self.nb_coup + 1
             Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
             return False
@@ -154,7 +161,7 @@ class Game :
         Scenario.looseMessage(self.nb_python)
         if (not self.hasSolde()) :
             return 'tooPoor'
-        while True:         
+        while True:
             inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
             checkInput = self.checkChoiceUser(inputUser)
             if checkInput == 'quit':
@@ -163,7 +170,7 @@ class Game :
                 if self.id_level != 0:
                     self.id_level = self.id_level - 1
                 return 'continue'
-        
+
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
         self.getGainWin()
@@ -231,3 +238,4 @@ class Game :
         self.nb_coup = 0
         self.mise = None
         self.gain = None
+
