@@ -111,9 +111,9 @@ class Scenario :
 
     @staticmethod
     def winMessage(user_name,nb_coup, gain) :
-        print('\t- Bingo ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
-            ', vous avez gagné ' + TextColor.ColorText('en "'+ str(nb_coup) +'" coup(s)', 'YELLOW')
-        + ' et vous avez emporté ' + TextColor.ColorText('"'+ str(gain) +'" €', 'YELLOW')+ ' !\n')
+        print(TextColor.ColorText('\t- Bingo ' + TextColor.ColorText(str(user_name), 'YELLOW', 'MAGENTA') +
+            ', vous avez gagné ' + TextColor.ColorText('en "'+ str(nb_coup) +'" coup(s)', 'YELLOW', 'MAGENTA') +
+            ' et vous avez emporté ' + TextColor.ColorText('"'+ str(gain) +'" €', 'YELLOW', 'MAGENTA')+ ' !\n', 'MAGENTA'))
 
     @staticmethod
     def looseMessage(number_python) :
