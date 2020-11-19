@@ -13,13 +13,13 @@ class Game :
     id_level = None
     nb_python = None
     nb_user = None
-    nb_coup = None
+    nb_coup = 0
     list_level = None
     mise = None
-    dotations = None
     gain = None
     solde = None
     controller = None
+
 
     def __init__(self) :
         self.list_level = [
@@ -41,7 +41,11 @@ class Game :
             self.askLevel()
 
         Scenario.askShowRules(self.list_level[0]) # Récupérer le `last_level`du USER
-
+        self.askLevel()
+        self.askMise()
+        self.generateRandomNumber()
+        self.hasEnoughTry()
+        
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""
         user = self.controller.getUserByName(user_name)
@@ -80,63 +84,74 @@ class Game :
 
     def askMise(self) :
         """ Demande la mise au USER et la vérifie """
+        mise = Scenario.askMise()
+        while (not self.isCorrectMiseValue(mise)) :
+            mise = Scenario.miseInvalid(self.connected_user.solde)
+        self.mise = int(mise)
+        self.connected_user.solde -= self.mise
 
-    def checkMiseValue(self, bet_value) :
+    def isCorrectMiseValue(self, bet_value) :
         """ Vérifie la mise """
+        try:
+            bet_value = int(bet_value)
+            if ((bet_value <= 0) or (bet_value > self.connected_user.solde)) :
+                return False
+            return True
+        except:
+            return False
 
     def generateRandomNumber(self) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """
+        Scenario.showIntervalNumber(self.list_level[self.id_level])
         level = self.list_level[int(self.id_level)]
         random_number = randint(1, level.interval)
         self.nb_python = random_number
 
     def askUserNumber(self) :
         """ Demande un nombre au USER et le vérifie """
-        while True:
+        user_number = ''
+        isCorrect = False
+        while (self.list_level[self.id_level].nb_try != self.nb_coup) and not isCorrect :
             user_number = Service.delay10SecondesInput(Scenario.askNumberToUser())
-            checked_number = self.checkNumberValue(user_number)
-            if checked_number == "Delai depasse":
-                Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
-            elif checked_number == "NaN" or checked_number == "Hors limite":
-                Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
-            else:
-                break
-            if self.list_level[self.id_level].nb_try == self.nb_coup:
-                return -1
-        return checked_number
+            isCorrect = self.isCorrectNumberValue(user_number)
+        self.nb_user = int(user_number) if isCorrect else ''
 
-    def checkNumberValue(self, number_value) :
+    def isCorrectNumberValue(self, number_value) :
         """ Vérifie le nombre """
         if number_value == '':
             self.nb_coup = self.nb_coup + 1
-            return "Delai depasse"
+            Scenario.timeoutMessage(str(self.list_level[self.id_level].nb_try - self.nb_coup))
+            return False
         if number_value.isdigit() == False:
-            return "NaN"
+            Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
+            return False
         number_value = int(number_value)
         if number_value <= 0 or number_value > self.list_level[self.id_level].interval:
-            return "Hors limite"
+            Scenario.notUnderstandMessage(str(self.list_level[self.id_level].interval))
+            return False
         self.nb_coup = self.nb_coup + 1
-        return number_value
+        return True
 
-    def hasWin(self, number) :
+    def hasWin(self) :
         """ Retourne si le USER a gagner """
-        comparison = self.compareNumberUser(number)
+        comparison = self.compareNumberUser()
         if (comparison == 'equal') :
             return True
         else :
             return False
 
 
-    def compareNumberUser(self, number) :
+    def compareNumberUser(self) :
         """ Compare la valeur du USER par rapport à la réponse, donne des indications au USER"""
-        if (number > self.nb_python) :
+        if (self.nb_user == '') :
+            return None
+        elif (self.nb_user > self.nb_python) :
             Scenario.clueMessageIsInferior()
             return 'superior'
-        elif (number < self.nb_python) :
+        elif (self.nb_user < self.nb_python) :
             Scenario.clueMessageIsSuperior()
             return 'inferior'
         else :
-            Scenario.winMessage(self.nb_coup , self.gain)
             return 'equal'
 
     def inCaseUserLoose(self) :
@@ -144,7 +159,7 @@ class Game :
         Scenario.looseMessage(self.nb_python)
         while True:
             inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
-            checkInput = self.checkCaseUserLoose(inputUser)
+            checkInput = self.checkChoiceUser(inputUser)
             if checkInput == 'quit':
                 return 'quit'
             elif checkInput == 'continue':
@@ -152,43 +167,38 @@ class Game :
                     self.id_level = self.id_level - 1
                 return 'continue'
 
-    def checkCaseUserLoose(self, inputUser) :
-        """ Check la réponse de l'user """
-        if inputUser == '' or inputUser.lower == 'n':
-            return 'quit'
-        if inputUser.lower == 'o':
-            return 'continue'
-        return 'error'
-
     def inCaseUserWin(self) :
         """ Dans le cas où le user gagne son level """
-        self.id_level = self.id_level + 1
-        self.solde = self.solde + self.getGainWin()
-        if self.isLevelMaxReached():
-            return 0
-        print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
-        while True:
-            inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
-            checkInput = self.checkChoiceUser(inputUser)
-            if checkInput == -1:
-                return -1
-            elif checkInput == 1:
-                return 1
+        self.getGainWin()
+        self.connected_user.solde += self.gain
+        Scenario.winMessage(self.nb_coup , self.gain)
+        if not self.isLevelMaxReached():
+            self.id_level += 1
+            print("\t- Super ! Vous passez au Level {}.\n".format(str(self.id_level + 1)))
+            while True:
+                inputUser = Service.delay10SecondesInput("\t- Souhaitez-vous continuer la partie (O/N) ?\n")
+                checkInput = self.checkChoiceUser(inputUser)
+                if checkInput == 'quit':
+                    return 'quit'
+                elif checkInput == 'continue':
+                    return 'continue'
+        return 'finished'
 
     def isLevelMaxReached(self) :
-        if self.id_level == len(self.list_level):
+        if self.id_level == len(self.list_level) - 1:
             return True
         return False
 
     def checkChoiceUser(self, inputUser) :
-        if inputUser == '' or inputUser.lower() == 'n':
-            return -1
+        if inputUser == '' or inputUser.lower() == 'n': 
+            return 'quit'
         if inputUser.lower() == 'o':
-            return 1
+            return 'continue'
         return 0
 
-    def getGainWin(self) :
-        return self.list_level[self.id_level - 1].gain[str(self.id_level)][str(self.nb_coup)]
+    def getGainWin(self) : 
+        self.list_level[self.id_level].generateArrayGain(self.mise)
+        self.gain = self.list_level[self.id_level].gain[str(self.id_level + 1)][str(self.nb_coup)]
 
     def hasSolde(self) :
         if self.solde <= 0 :
@@ -199,3 +209,11 @@ class Game :
     #TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
+
+    def hasEnoughTry(self) :
+        """ Retourne si le USER possède encore des essais """
+        while (self.list_level[self.id_level].nb_try != self.nb_coup) :
+            self.askUserNumber()
+            if(self.hasWin()) :
+                return self.inCaseUserWin()
+        return self.inCaseUserLoose()

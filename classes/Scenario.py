@@ -20,6 +20,16 @@ class Scenario :
         return user_name
 
     @staticmethod
+    def askMise() :
+        mise = input(TextColor.ColorText('\t- Le jeu commence, entrez votre mise : ?\n', 'MAGENTA'))
+        return mise
+
+    @staticmethod
+    def miseInvalid(montant_max) :
+        mise = input(TextColor.ColorText('\t- Le montant saisi n\'est pas valide. Entrer SVP un montant entre 1 et ' + str(montant_max) + ' € :  ?\n ', 'MAGENTA'))
+        return mise
+
+    @staticmethod
     def askLevel(level_max):
         user_level = input("Veuillez choisir le level entre 1 et " + str(level_max) +" s'il vous plaît : ")
         return user_level
@@ -37,8 +47,6 @@ class Scenario :
     @staticmethod
     def askShowRules(level) :
         show_rules = input(TextColor.ColorText('\t- Souhaitez-vous connaitre les règles ?(O/N) \n ', 'YELLOW'))
-
-        Scenario.showIntervalNumber(level)
 
         if (show_rules.casefold() == 'o') :
             Scenario.rules(level)
@@ -109,6 +117,4 @@ class Scenario :
     @staticmethod
     def looseMessage(number_python) :
         print(TextColor.ColorText('\t- Vous avez perdu ! Mon nombre est "'+ TextColor.ColorText(str(number_python), 'YELLOW', 'RED')+
-        '" !\n ' + TextColor.ColorText('trop petit', 'YELLOW', 'RED') + ' !\n', 'RED'))
-
-    # ...
+        '" !\n ', 'RED'))

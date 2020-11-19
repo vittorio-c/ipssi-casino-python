@@ -30,7 +30,7 @@ class SqliteDatabase :
                                         is_first_time TINYINT DEFAULT 1,
                                         last_level TINYINT DEFAULT 1,
                                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                                        solde INTEGER DEFAULT 0
+                                        solde INTEGER DEFAULT 10
                                     ); """
         try:
             cursor = self.connexion.cursor()
