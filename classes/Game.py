@@ -74,9 +74,21 @@ class Game :
 
     def askMise(self) :
         """ Demande la mise au USER et la vérifie """
+        mise = Scenario.askMise()
+        while (not self.isCorrectMiseValue(mise)) :
+            mise = Scenario.miseInvalid(self.solde)
+        self.mise = mise
+        self.solde -= self.mise
 
-    def checkMiseValue(self, bet_value) :
+    def isCorrectMiseValue(self, bet_value) :
         """ Vérifie la mise """
+        try:
+            int(bet_value)
+            if (not(bet_value > 0) and (bet_value <= self.solde)) :
+                return False
+            return True
+        except:
+            return False
 
     def generateRandomNumber(self) :
         """ Génère un nombre aléatoire entre 1 (inclus) et `max` (inclus) """

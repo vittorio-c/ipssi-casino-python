@@ -20,6 +20,14 @@ class Scenario :
         return user_name
 
     @staticmethod
+    def askMise() :
+        mise = input(TextColor.ColorText('\t- Le jeu commence, entrez votre mise : ?\n', 'MAGENTA'))
+
+    @staticmethod
+    def miseInvalid(montant_max) :
+        mise = input(TextColor.ColorText('\t- Le montant saisi n\'est pas valide. Entrer SVP un montant entre 1 et ' + montant_max + ' € :  ?\n ', 'MAGENTA'))
+
+    @staticmethod
     def askLevel(level_max):
         user_level = input("Veuillez choisir le level entre 1 et" + level_max +"s'il vous plaît")  
         return user_level
