@@ -7,7 +7,6 @@ from .Service import Service
 
 class Game :
     """ Contient la logique du JEU """
-
     connected_user = None
     id_level = None
     nb_python = None
@@ -32,10 +31,11 @@ class Game :
         self.id_level = 0
         self.stats_controller = StatsController()
 
-    def run(self) :
+    def run(self, pseudo) :
         """ Execution du jeu """
         Scenario.launchGame()
-        user_name = Scenario.askUsername()
+        #user_name = Scenario.askUsername()
+        user_name = pseudo
         self.connected_user = self.getUser(user_name)
         if not self.hasSolde() :
             Scenario.tooPoorMessage()
