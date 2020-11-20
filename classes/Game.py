@@ -36,7 +36,7 @@ class Game :
     def run(self) :
         """ Execution du jeu """
         Scenario.launchGame()
-        user_name = Scenario.askUsername()
+        user_name = self.getUsername()
         self.connected_user = self.getUser(user_name)
         if not self.hasSolde() :
             self.showUserStats()
@@ -56,6 +56,23 @@ class Game :
                 self.resetProperties()
             self.showUserStats()
             self.handleStatusGame(status)
+
+    def getUsername(self) : 
+        """ Récupère le pseudo de l'USER via un input """
+        user_name = Scenario.askUsername()
+        while (not self.isCorrectUsername(user_name)) :
+            user_name = Scenario.usernameInvalid()
+        return user_name
+
+    def isCorrectUsername(self, user_name) :
+        """ Retourne si le pseudo de l'USER est correct """
+        try :
+            user_name = int(user_name)
+            return False
+        except :
+            if user_name == '' :
+                return False
+            return True
 
     def getUser(self,user_name) :
         """ Renvoie un USER depuis la base de données ou créé un nouvel USER"""

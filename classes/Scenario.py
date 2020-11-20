@@ -13,6 +13,11 @@ class Scenario :
         user_name = input(TextColor.ColorText('\t- Je suis ' + TextColor.ColorText('Python', 'YELLOW', 'MAGENTA') +
          '. Quel est votre pseudo ? \n ', 'MAGENTA'))
         return user_name
+        
+    @staticmethod
+    def usernameInvalid() :
+        user_name = input(TextColor.ColorText('\t- Le pseudo saisi n\'est pas valide. Entrer un pseudo avec 1 caractère minimum et ne comportant pas que des chiifres.\n ', 'RED'))
+        return user_name
     
     @staticmethod
     def sayHi(user_name, solde) :
@@ -206,16 +211,3 @@ class Scenario :
     @staticmethod
     def messagegetNbTotalLevelsPlayed(nb) :
         print("\t- Vous avez joué au total "+str(nb)+" parties.\n")
-
-        
-
-        
-
-
-        
-
-
-        
-
-
-
