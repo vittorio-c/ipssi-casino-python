@@ -21,7 +21,6 @@ class Game :
     stats_controller = None
     statusLevel = None
     level_history = None
-    current_level = 1
 
     def __init__(self) :
         self.list_level = [
@@ -51,9 +50,9 @@ class Game :
                 self.askMise()
                 self.generateRandomNumber()
                 status = self.hasEnoughTry()
+                self.insertLevelInDatabase()
                 self.updateLocalUser()
                 self.user_controller.updateUser(self.connected_user)
-                self.insertLevelInDatabase()
                 self.resetProperties()
             self.showUserStats()
             self.handleStatusGame(status)
@@ -81,10 +80,8 @@ class Game :
                 user_level = Scenario.wrongLevel(self.connected_user.last_level)
 
             self.id_level = int(user_level) - 1
-            self.current_level = int(user_level)
         else:
             self.id_level = 0
-            self.current_level = 1
 
     def isCorrectLevel(self, level):
         """Vérifie le level entré par l'user"""
@@ -182,7 +179,6 @@ class Game :
             elif checkInput == 'continue':
                 if self.id_level != 0:
                     self.id_level -= 1
-                    self.current_level -= 1
                 return 'continue'
 
     def inCaseUserWin(self) :
@@ -267,7 +263,7 @@ class Game :
     def insertLevelInDatabase(self) :
         """ Insertion du level en base de donnée """
         stats_data = {
-            'level': self.current_level,
+            'level': self.connected_user.last_level,
             'attempts': self.nb_coup,
             'bet': self.mise,
             'profit': self.gain,
