@@ -55,9 +55,7 @@ class Scenario :
             show_rules = input(TextColor.ColorText('\t Veuillez répondre par (O/N) :\n ', 'YELLOW'))
         if (show_rules.casefold() == 'o') :
             Scenario.rules(level)
-            print(TextColor.ColorText('\t ******** Bienvenue au Casino-Game, Amusez-vous bien ! ********  \n', 'WHITE'))
-        elif (show_rules.casefold() == 'n'):
-            print(TextColor.ColorText('\t ******** Bienvenue au Casino-Game, Amusez-vous bien ! ******** \n', 'WHITE'))
+        print(TextColor.ColorText('\t ******** Bienvenue au Casino-Game, Amusez-vous bien ! ********  \n', 'WHITE'))
         
     @staticmethod
     def rules(level) :
@@ -135,77 +133,88 @@ class Scenario :
         print(TextColor.ColorText('\t- Désolé, mais votre solde est insuffisant.\n', 'RED'))
 
     @staticmethod
-    def finishedMessage() :
-        print(TextColor.ColorText('-\t Nous vous remercions pour votre fidélité !\n', 'RED'))
-
-    @staticmethod
     def nextLevel(level) :
-        print("\t- Super ! Vous passez au Level {}.\n".format(str(level)))
+        print(TextColor.ColorText("\t- Super ! Vous passez au Level " +
+            TextColor.ColorText(str(level), "YELLOW", "GREEN") + ".\n", 'GREEN'))
 
     @staticmethod
     def messageAllStats(date) :
-        print("\t- Voici vos statistiques, depuis la 1è fois le "+str(date)+" :\n")
+        print(TextColor.ColorText("\t- Voici vos statistiques, depuis la 1è fois " +
+            TextColor.ColorText(str(date), 'YELLOW', 'MAGENTA') + " :\n", 'MAGENTA'))
 
     @staticmethod
     def messageBestStats() :
-        print("\t\t- Vos meilleures statistiques :\n")
+        print(TextColor.ColorText("\t\t- Vos meilleures statistiques :\n", 'GREEN'))
 
     @staticmethod
     def messageBestStatLevelReached(level) :
-        print("\t\t\t- Level le plus élevé atteint est "+str(level)+"\n")
+        print(TextColor.ColorText("\t\t\t- Level le plus élevé atteint est " +
+            TextColor.ColorText(str(level), 'YELLOW', 'MAGENTA') + "\n", 'MAGENTA'))
 
     @staticmethod
     def messageNbCoupFindFirstAttempt(nb) :
-        print("\t\t\t- Vous avez réussi à trouver le bon nombre dès le 1è coup "+str(nb)+" fois.\n")
+        print(TextColor.ColorText("\t\t\t- Vous avez réussi à trouver le bon nombre dès le 1è coup " +
+            TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " fois.\n", 'MAGENTA'))
 
     @staticmethod
     def messageGetBestGainWon(nb) :
-        print("\t\t\t- Le gain le plus elevé est "+str(nb)+" €.\n")
+        print(TextColor.ColorText("\t\t\t- Le gain le plus elevé est " +
+            TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " €.\n", 'MAGENTA'))
 
     @staticmethod
     def messageGetBestBetUse(nb) :
-        print("\t\t\t- La mise la plus elevé est "+str(nb)+" €.\n")
+        print(TextColor.ColorText("\t\t\t- La mise la plus elevé est " +
+            TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " €.\n", 'MAGENTA'))
 
     @staticmethod
     def messageGetNbLevelWon(nb) :
-        print("\t\t\t- Le nombre de manche gagné est de "+str(nb)+".\n")
+        print(TextColor.ColorText("\t\t\t- Le nombre de manche gagné est de " +
+        TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + ".\n", 'MAGENTA'))
 
     @staticmethod
     def messageWorstStats() :
-        print("\t\t- Vos pires statistiques :\n")
+        print(TextColor.ColorText("\t\t- Vos pires statistiques :\n", 'RED'))
 
     @staticmethod
     def messageGetWorstGainWon(nb) :
-        print("\t\t\t- Le gain le plus bas est "+str(nb)+" €.\n")
+        print(TextColor.ColorText("\t\t\t- Le gain le plus bas est " +
+            TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " €.\n", 'MAGENTA'))
 
     @staticmethod
     def messageGetWorstBetUse(nb) :
-        print("\t\t\t- La mise la plus basse est "+str(nb)+" €.\n")
+        print(TextColor.ColorText("\t\t\t- La mise la plus basse est " +
+        TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " €.\n", 'MAGENTA'))
 
     @staticmethod
     def messageGetNbLevelLose(nb) :
-        print("\t\t\t- Le nombre de manche perdu est de "+str(nb)+".\n")
+        print(TextColor.ColorText("\t\t\t- Le nombre de manche perdu est de " +
+        TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + ".\n", 'MAGENTA'))
 
     @staticmethod
     def messageAverageStats() :
-        print("\t\t- Vos moyennes :\n")
+        print(TextColor.ColorText("\t\t- Vos moyennes :\n", 'BLUE'))
 
     @staticmethod
     def messageGetAverageGainWon(nb) :
-        print("\t\t\t- Le gain moyenne est de "+str(nb)+" €.\n")
+        print(TextColor.ColorText("\t\t\t- Le gain moyenne est de " +
+        TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " €.\n", 'MAGENTA'))
 
     @staticmethod
     def messageGetAverageBetUsed(nb) :
-        print("\t\t\t- La mise moyenne est de "+str(nb)+" €.\n")
+        print(TextColor.ColorText("\t\t\t- La mise moyenne est de " +
+            TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " €.\n", 'MAGENTA'))
 
     @staticmethod
     def messageGetNbAttemptsByLevel(nbAttempts, num_level) :
-        print("\t\t\t- Le nombre moyen de tentatives pour trouver le bon nombre au niveau {} est de {}.\n".format(str(num_level), str(nbAttempts)))
-        print("\t\t\t(on ne comptabilise le nombre de coups qu'en cas de réussite)\n")
+        print(TextColor.ColorText("\t\t\t- Le nombre moyen de tentatives pour trouver le bon nombre au niveau" + 
+            TextColor.ColorText(str(num_level), 'YELLOW', 'MAGENTA') + "est de" +
+            TextColor.ColorText(str(nbAttempts), 'YELLOW', 'MAGENTA') + "\n", 'MAGENTA'))
+        print(TextColor.ColorText("\t\t\t(on ne comptabilise le nombre de coups qu'en cas de réussite)\n", 'MAGENTA'))
         
     @staticmethod
     def messagegetNbTotalLevelsPlayed(nb) :
-        print("\t- Vous avez joué au total "+str(nb)+" parties.\n")
+        print(TextColor.ColorText("\t- Vous avez joué au total " +
+            TextColor.ColorText(str(nb), 'YELLOW', 'MAGENTA') + " parties.\n", 'MAGENTA'))
 
         
 
