@@ -143,3 +143,26 @@ allstats = self.stats_controller.getStatsByUser(self.connected_user.user_id)
 for stat in allstats:
     print(stat.profit)
 ```
+
+# singleton
+
+Pour tester qu'il s'agit bien du même objet, dans DBConnection faire :
+
+```
+        c1 = DBConnector.Instance()
+        c2 = DBConnector.Instance()
+
+        print("Id of c1 : {}".format(str(id(c1))))
+        print("Id of c2 : {}".format(str(id(c1))))
+
+        print("c1 is c2 ? " + str(c1 is c2))
+        sys.exit()
+
+```
+
+Ou bien dans DBConnection faire :
+
+```
+        print("Id of Instance Connector : {}".format(str(id(cls.connector))))
+
+```

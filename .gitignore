@@ -3,3 +3,5 @@
 .sqlite_database.db
 /.vscode
 /classes/Controllers/__pycache__
+/classes/Database/Repository/__pycache__
+/classes/Database/__pycache__

@@ -1,14 +1,12 @@
-from classes.SqliteDatabase import SqliteDatabase
 from classes.Stat import Stat
 from operator import itemgetter
+from classes.Database.Repository.StatRepository import StatRepository
 
 class StatsController :
     """ Permet de réaliser des opérations sur les stats"""
 
-    database = None
-
     def __init__(self) :
-        self.database = SqliteDatabase()
+        self.stat_repo = StatRepository()
 
     def createStats(self, user_id, stats_data) :
         """ Insert une stat en base de données """
@@ -16,7 +14,7 @@ class StatsController :
             self.validateStatData(stats_data)
             level, attempts, bet, profit, result = itemgetter('level', 'attempts', 'bet', 'profit', 'result')(stats_data)
             stats_model = Stat(user_id, level, attempts, bet, profit, result)
-            return self.database.createStats(stats_model)
+            return self.stat_repo.createStats(stats_model)
         except (TypeError, ValueError) as e:
             print('Sorry, we could not create the stats.')
             print(e)
@@ -25,11 +23,12 @@ class StatsController :
         """ Récupère les stats models via le user depuis la base de données
             :return: list(Stat,)
         """
-        stats_models = self.database.getStatsByUserId(user_id)
+        stats_models = self.stat_repo.getStatsByUserId(user_id)
+
         return stats_models
 
     def validateStatData(self, stat_data) :
-        """ Vérifie les datas avant insertion en database """
+        """ Vérifie les datas avant insertion en stat_repo """
         try :
             if stat_data['level'] not in (1, 2, 3) :
                 raise TypeError()
