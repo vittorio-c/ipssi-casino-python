@@ -109,21 +109,13 @@ Pour tester qu'il s'agit bien du même objet, dans DBConnection faire :
 Ou bien dans DBConnection faire :
 
 ```
-        print("Id of Instance Connector : {}".format(str(id(cls.connector))))
-
+print("Id of Instance Connector : {}".format(str(id(cls.connector))))
 ```
 
 # TODO
 
-**stats calculées (à faire) :**
+- Finaliser l'interface graphique
+- Faire un classement entre joueurs
+- Ajouter une BDD distante
+- Faire de la data : stats, traitement, graphs, etc.
 
-- Level le plus élevé atteint est "level"
-- Vous avez réussi à trouver le bon nombre dès le 1è coup "f" fois
-- Le gain le plus elevé est
-- La mise la plus elevé est
-- Vos pires statistiques (dans l'autre sens)
-- La mise moyenne est de "mise_moy"
-- Le nombre moyen de tentatives pour trouver le bon nombre est
-- le pourcentage de réussite
-
-**Interface graphique :**
