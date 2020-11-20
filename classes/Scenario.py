@@ -195,7 +195,7 @@ class Scenario :
         print("\t\t\t- Le gain moyenne est de "+str(nb)+" €.\n")
 
     @staticmethod
-    def messageGetAverageBetUse(nb) :
+    def messageGetAverageBetUsed(nb) :
         print("\t\t\t- La mise moyenne est de "+str(nb)+" €.\n")
 
     @staticmethod
