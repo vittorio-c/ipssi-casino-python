@@ -8,7 +8,7 @@ class DBConnection(object):
     def get_connector(cls):
         """Creates or return new Singleton database connection"""
         cls.connector = DBConnector.Instance()
-        print("Id of Instance Connector : {}".format(str(id(cls.connector))))
+        # print("Id of Instance Connector : {}".format(str(id(cls.connector))))
 
         return cls.connector
 

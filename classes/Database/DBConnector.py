@@ -12,7 +12,7 @@ class DBConnector(object):
         try:
             self.connection = sqlite3.connect(self.database_file_name)
             self.connection.row_factory = sqlite3.Row
-            print('HELLOOOOO HELLOOOOO HELLOOOOO HELLOOOOO')
+
             self.createTables()
         except DatabaseError as e:
             print(e)
