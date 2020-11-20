@@ -206,8 +206,8 @@ class Scenario :
 
     @staticmethod
     def messageGetNbAttemptsByLevel(nbAttempts, num_level) :
-        print(TextColor.ColorText("\t\t\t- Le nombre moyen de tentatives pour trouver le bon nombre au niveau" + 
-            TextColor.ColorText(str(num_level), 'YELLOW', 'MAGENTA') + "est de" +
+        print(TextColor.ColorText("\t\t\t- Le nombre moyen de tentatives pour trouver le bon nombre au niveau " + 
+            TextColor.ColorText(str(num_level), 'YELLOW', 'MAGENTA') + " est de " +
             TextColor.ColorText(str(nbAttempts), 'YELLOW', 'MAGENTA') + "\n", 'MAGENTA'))
         print(TextColor.ColorText("\t\t\t(on ne comptabilise le nombre de coups qu'en cas de réussite)\n", 'MAGENTA'))
         
