@@ -20,6 +20,7 @@ class Game :
     user_controller = None
     stats_controller = None
     statusLevel = None
+    level_history = None
 
     def __init__(self) :
         self.list_level = [
@@ -38,6 +39,7 @@ class Game :
         user_name = Scenario.askUsername()
         self.connected_user = self.getUser(user_name)
         if not self.hasSolde() :
+            self.showUserStats()
             Scenario.tooPoorMessage()
         else :
             Scenario.sayHi(self.connected_user.user_name, self.connected_user.solde)
@@ -48,9 +50,9 @@ class Game :
                 self.askMise()
                 self.generateRandomNumber()
                 status = self.hasEnoughTry()
+                self.insertLevelInDatabase()
                 self.updateLocalUser()
                 self.user_controller.updateUser(self.connected_user)
-                self.insertLevelInDatabase()
                 self.resetProperties()
             self.showUserStats()
             self.handleStatusGame(status)
@@ -176,7 +178,7 @@ class Game :
                 return 'quit'
             elif checkInput == 'continue':
                 if self.id_level != 0:
-                    self.id_level = self.id_level - 1
+                    self.id_level -= 1
                 return 'continue'
 
     def inCaseUserWin(self) :
@@ -197,11 +199,13 @@ class Game :
                 return 'continue'
 
     def isLevelMaxReached(self) :
+        """ Retourne si on a atteint le dernier niveau """
         if self.id_level == len(self.list_level) - 1:
             return True
         return False
 
     def checkChoiceUser(self, inputUser) :
+        """ Vérifie le choix de l'utilisateur """
         if inputUser == '' or inputUser.lower() == 'n':
             return 'quit'
         if inputUser.lower() == 'o':
@@ -209,10 +213,12 @@ class Game :
         return 0
 
     def getGainWin(self) :
+        """ Met à jour la variable gain locale """
         self.list_level[self.id_level].generateArrayGain(self.mise)
         self.gain = self.list_level[self.id_level].gain[str(self.id_level + 1)][str(self.nb_coup)]
 
     def hasSolde(self) :
+        """ Retourne si l'USER possède un solde suffisant """
         if self.connected_user.solde <= 0 :
             return False
         else :
@@ -249,14 +255,15 @@ class Game :
         self.connected_user.is_first_time = False
         self.connected_user.last_level = self.id_level + 1
 
-######################## TODO: STATS ########################
-    # TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
         self.getAllStats()
+        self.getNbTotalLevelsPlayed()
+        Scenario.messageAllStats(self.level_history[0].created_at)
+        self.showBestStats()
+        self.showWorstStats()
+        self.showAverageStats()
 
-    
-    # TODO: SAUVEGARDER LA MANCHE A LA FIN
     def insertLevelInDatabase(self) :
         """ Insertion du level en base de donnée """
         stats_data = {
@@ -269,8 +276,128 @@ class Game :
         }
         new_stats = self.stats_controller.createStats(self.connected_user.user_id, stats_data)
 
-    def getAllStats(self):
+    def getAllStats(self) :
         """ Récupère l'historique des parties de l'USER """
-        level_history = self.stats_controller.getStatsByUser(self.connected_user.user_id)
-        for level in level_history:
-            print(level.profit)
+        self.level_history = self.stats_controller.getStatsByUser(self.connected_user.user_id)
+
+    def getNbTotalLevelsPlayed(self) :
+        """ Traite et affiche le nombre de parties jouées """
+        nbTotalLevelsPlayed = len(self.level_history)
+        Scenario.messagegetNbTotalLevelsPlayed(nbTotalLevelsPlayed)
+
+    def showBestStats(self) :
+        """ Affiche les meilleures stats """
+        Scenario.messageBestStats()
+        self.showBestStatLevelReached()
+        self.showNbCoupFindFirstAttempt()
+        self.showBestGainWon()
+        self.showBestBetUse()
+        self.showNbLevelWon()
+
+    def showWorstStats(self) :
+        """ Affiche les pires stats """
+        Scenario.messageWorstStats()
+        self.showWorstGainWon()
+        self.showWorstBetUse()
+        self.showNbLevelLose()
+
+    def showAverageStats(self) :
+        """ Affiche les stats moyennes """
+        Scenario.messageAverageStats()
+        self.showAverageGainWon()
+        self.showAverageBetUsed()
+        self.showAverageNbAttemptsByLevels()
+
+    def showBestStatLevelReached(self) :
+        """ Traite et affiche le plus grand niveau atteint """
+        bestLevel = 0
+        for level in self.level_history :
+            bestLevel = level.level if bestLevel < level.level else bestLevel
+        Scenario.messageBestStatLevelReached(bestLevel)
+
+    def showNbCoupFindFirstAttempt(self) :
+        """ Traite et affiche les nombre de partie finie en un coup """
+        nbCoupFindFirstAttempt = 0
+        for level in self.level_history :
+            if level.attempts == 1:
+                nbCoupFindFirstAttempt += 1
+        Scenario.messageNbCoupFindFirstAttempt(nbCoupFindFirstAttempt)
+
+    def showBestGainWon(self) :
+        """ Traite et affiche le plus grand gain obtenu """
+        bestGainWon = 0
+        for level in self.level_history :
+            bestGainWon = level.profit if bestGainWon < level.profit else bestGainWon
+        Scenario.messageGetBestGainWon(bestGainWon)
+
+    def showBestBetUse(self) :
+        """ Traite et affiche la plus grande mise de l'USER """
+        bestBetUse = 0
+        for level in self.level_history :
+            bestBetUse = level.bet if bestBetUse < level.bet else bestBetUse
+        Scenario.messageGetBestBetUse(bestBetUse)
+
+    def showNbLevelWon(self) :
+        """ Traite et affiche le nombre de niveau gagné """
+        nbLevelWon = 0
+        for level in self.level_history :
+            if level.result == 1:
+                nbLevelWon += 1
+        Scenario.messageGetNbLevelWon(nbLevelWon)
+    
+    def showWorstGainWon(self) :
+        """ Traite et affiche le plus petit gain obtenu """
+        worstGainWon = self.level_history[0].profit
+        for level in self.level_history :
+            worstGainWon = level.profit if ((worstGainWon > level.profit) and (level.result == 1)) else worstGainWon
+        Scenario.messageGetWorstGainWon(worstGainWon)
+
+    def showWorstBetUse(self) :
+        """ Traite et affiche la plus petit mise de l'USER """
+        worstBetUse = self.level_history[0].bet
+        for level in self.level_history :
+            worstBetUse = level.bet if worstBetUse > level.bet else worstBetUse
+        Scenario.messageGetWorstBetUse(worstBetUse)
+
+    def showNbLevelLose(self) :
+        """ Traite et affiche le nombre de niveau perdu """
+        nbLevelLose = 0
+        for level in self.level_history :
+            if level.result == 0:
+                nbLevelLose += 1
+        Scenario.messageGetNbLevelLose(nbLevelLose)
+    
+    def showAverageGainWon(self) :
+        """ Traite et affiche la moyenne des gains """
+        averageGainWon = 0
+        for level in self.level_history :
+            averageGainWon += level.profit
+        averageGainWon = averageGainWon/len(self.level_history)
+        Scenario.messageGetAverageGainWon(averageGainWon)
+
+    def showAverageBetUsed(self) :
+        """ Traite et affiche la moyenne des mises de l'USER """
+        averageBetUsed = 0
+        for level in self.level_history :
+            averageBetUsed += level.bet
+        averageBetUsed = averageBetUsed/len(self.level_history)
+        Scenario.messageGetAverageBetUsed(averageBetUsed)
+
+    def showAverageNbAttemptsByLevels(self) :
+        """ Traite et affiche le nombre de coup moyen pour tous les niveaux """
+        level_current = 1
+        while level_current <= len(self.list_level) :
+            self.showAverageNbAttemptsByLevel(level_current)
+            level_current += 1
+
+    def showAverageNbAttemptsByLevel(self, num_level) : 
+        """ Traite et affiche le nombre de coup moyen pour un niveau spécifique """
+        nbAttempts = 0
+        nbLevel = 0
+        for level in self.level_history :
+            if ((level.level == num_level) and (level.result == 1))  :
+                nbLevel += 1
+                nbAttempts += level.attempts
+        if nbLevel != 0 :
+            nbAttempts = nbAttempts/nbLevel
+        Scenario.messageGetNbAttemptsByLevel(nbAttempts, num_level)
