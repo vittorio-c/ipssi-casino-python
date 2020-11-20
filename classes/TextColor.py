@@ -15,7 +15,7 @@ class TextColor :
     """ Changer la couleur du texte """
     
     @staticmethod
-    def ColorText(sentence, color, reset_color = 'RESET') :
+    def ColorText(sentence, color = 'RESET', reset_color = 'RESET') :
         try :
             return Color[color] + sentence + Color[reset_color]
         except :
