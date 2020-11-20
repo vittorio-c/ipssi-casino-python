@@ -185,6 +185,8 @@ class Game :
         """ Dans le cas où le user perd son level """
         self.statusLevel = 0
         self.gain = 0
+        if self.id_level != 0:
+            self.id_level -= 1
         Scenario.looseMessage(self.nb_python)
         if (not self.hasSolde()) :
             return 'tooPoor'
@@ -194,8 +196,6 @@ class Game :
             if checkInput == 'quit':
                 return 'quit'
             elif checkInput == 'continue':
-                if self.id_level != 0:
-                    self.id_level -= 1
                 return 'continue'
 
     def inCaseUserWin(self) :
