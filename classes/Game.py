@@ -249,13 +249,10 @@ class Game :
         self.connected_user.is_first_time = False
         self.connected_user.last_level = self.id_level + 1
 
-######################## TODO: STATS ########################
-    # TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
         self.getAllStats()
 
-    
     # TODO: SAUVEGARDER LA MANCHE A LA FIN
     def insertLevelInDatabase(self) :
         """ Insertion du level en base de donnée """

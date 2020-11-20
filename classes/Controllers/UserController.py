@@ -1,22 +1,23 @@
-from classes.SqliteDatabase import SqliteDatabase
 from classes.User import User
+from classes.Database.Repository.UserRepository import UserRepository
 
 class UserController :
     """ Permet de réaliser des opérations sur les users"""
 
-    database = None
-
     def __init__(self) :
-        self.database = SqliteDatabase()
+        self.user_repo = UserRepository()
 
-    def getUserByName(self, name) :
+    def getUserByName(self, user_name) :
         """ Récupère le user via son nom depuis la base de données"""
-        user = self.database.getUserByName(name)
+        user = self.user_repo.getUserByName(user_name)
+
         return user
 
     def createUser(self, user_name) :
         """ Insert un user en base de données """
-        return self.database.createUser(user_name)
+
+        return self.user_repo.createUser(user_name)
+
 
     def updateUser(self, user_model) :
         """ Update un user en base de données """
@@ -25,7 +26,7 @@ class UserController :
                 raise TypeError()
 
             self.validateUserData(user_model)
-            return self.database.updateUser(user_model)
+            return self.user_repo.updateUser(user_model)
         except (TypeError, ValueError) as e:
             print('Sorry, we could not update the user.')
             print(e)
