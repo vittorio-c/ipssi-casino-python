@@ -29,8 +29,8 @@ class Game :
             ConfigurationLevel(3, 7, 30),
         ]
         self.time_interval = 10 # secondes
-        self.user_controller = UserController()
         self.id_level = 0
+        self.user_controller = UserController()
         self.stats_controller = StatsController()
 
     def run(self) :
@@ -140,7 +140,7 @@ class Game :
         user_number = ''
         isCorrect = False
         while (self.list_level[self.id_level].nb_try != self.nb_coup) and not isCorrect :
-            user_number = Service.delay10SecondesInput(Scenario.askNumber())
+            user_number = Service.delayInput(Scenario.askNumber(), self.time_interval)
             isCorrect = self.isCorrectNumberValue(user_number)
         self.nb_user = int(user_number) if isCorrect else ''
 
@@ -189,7 +189,7 @@ class Game :
         if (not self.hasSolde()) :
             return 'tooPoor'
         while True:
-            inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
+            inputUser = Service.delayInput(Scenario.askNewTry(), self.time_interval)
             checkInput = self.checkChoiceUser(inputUser)
             if checkInput == 'quit':
                 return 'quit'
@@ -208,7 +208,7 @@ class Game :
             self.id_level += 1
             Scenario.nextLevel(str(self.id_level + 1))
         while True:
-            inputUser = Service.delay10SecondesInput(Scenario.askNewTry())
+            inputUser = Service.delayInput(Scenario.askNewTry(), self.time_interval)
             checkInput = self.checkChoiceUser(inputUser)
             if checkInput == 'quit':
                 return 'quit'
