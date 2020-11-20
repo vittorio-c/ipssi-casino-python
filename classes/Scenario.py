@@ -200,11 +200,14 @@ class Scenario :
 
     @staticmethod
     def messageGetNbAttemptsByLevel(nbAttempts, num_level) :
-        print("\t\t\t - Le nombre moyen de tentatives pour trouver le bon nombre au niveau {} est de {}.\n".format(str(num_level), str(nbAttempts)))
+        print("\t\t\t- Le nombre moyen de tentatives pour trouver le bon nombre au niveau {} est de {}.\n".format(str(num_level), str(nbAttempts)))
         print("\t\t\t(on ne comptabilise le nombre de coups qu'en cas de réussite)\n")
         
+    @staticmethod
+    def messagegetNbTotalLevelsPlayed(nb) :
+        print("\t- Vous avez joué au total "+str(nb)+" parties.\n")
 
-
+        
 
         
 

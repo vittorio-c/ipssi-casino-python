@@ -255,18 +255,15 @@ class Game :
         self.connected_user.is_first_time = False
         self.connected_user.last_level = self.id_level + 1
 
-######################## TODO: STATS ########################
-    # TODO: AFFICHER LES STATS
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
         self.getAllStats()
+        self.getNbTotalLevelsPlayed()
         Scenario.messageAllStats(self.level_history[0].created_at)
         self.showBestStats()
         self.showWorstStats()
         self.showAverageStats()
 
-    
-    # TODO: SAUVEGARDER LA MANCHE A LA FIN
     def insertLevelInDatabase(self) :
         """ Insertion du level en base de donnée """
         stats_data = {
@@ -282,6 +279,10 @@ class Game :
     def getAllStats(self) :
         """ Récupère l'historique des parties de l'USER """
         self.level_history = self.stats_controller.getStatsByUser(self.connected_user.user_id)
+
+    def getNbTotalLevelsPlayed(self) :
+        nbTotalLevelsPlayed = len(self.level_history)
+        Scenario.messagegetNbTotalLevelsPlayed(nbTotalLevelsPlayed)
 
     def showBestStats(self) :
         Scenario.messageBestStats()
