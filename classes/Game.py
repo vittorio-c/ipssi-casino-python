@@ -20,6 +20,8 @@ class Game :
     user_controller = None
     stats_controller = None
     statusLevel = None
+    level_history = None
+    current_level = 1
 
     def __init__(self) :
         self.list_level = [
@@ -38,6 +40,7 @@ class Game :
         user_name = Scenario.askUsername()
         self.connected_user = self.getUser(user_name)
         if not self.hasSolde() :
+            self.showUserStats()
             Scenario.tooPoorMessage()
         else :
             Scenario.sayHi(self.connected_user.user_name, self.connected_user.solde)
@@ -78,8 +81,10 @@ class Game :
                 user_level = Scenario.wrongLevel(self.connected_user.last_level)
 
             self.id_level = int(user_level) - 1
+            self.current_level = int(user_level)
         else:
             self.id_level = 0
+            self.current_level = 1
 
     def isCorrectLevel(self, level):
         """Vérifie le level entré par l'user"""
@@ -176,7 +181,8 @@ class Game :
                 return 'quit'
             elif checkInput == 'continue':
                 if self.id_level != 0:
-                    self.id_level = self.id_level - 1
+                    self.id_level -= 1
+                    self.current_level -= 1
                 return 'continue'
 
     def inCaseUserWin(self) :
@@ -254,13 +260,17 @@ class Game :
     def showUserStats(self) :
         """ Affiche les meilleurs et pires statistiques """
         self.getAllStats()
+        Scenario.messageAllStats(self.level_history[0].created_at)
+        self.showBestStats()
+        self.showWorstStats()
+        self.showAverageStats()
 
     
     # TODO: SAUVEGARDER LA MANCHE A LA FIN
     def insertLevelInDatabase(self) :
         """ Insertion du level en base de donnée """
         stats_data = {
-            'level': self.connected_user.last_level,
+            'level': self.current_level,
             'attempts': self.nb_coup,
             'bet': self.mise,
             'profit': self.gain,
@@ -269,8 +279,108 @@ class Game :
         }
         new_stats = self.stats_controller.createStats(self.connected_user.user_id, stats_data)
 
-    def getAllStats(self):
+    def getAllStats(self) :
         """ Récupère l'historique des parties de l'USER """
-        level_history = self.stats_controller.getStatsByUser(self.connected_user.user_id)
-        for level in level_history:
-            print(level.profit)
+        self.level_history = self.stats_controller.getStatsByUser(self.connected_user.user_id)
+
+    def showBestStats(self) :
+        Scenario.messageBestStats()
+        self.showBestStatLevelReached()
+        self.showNbCoupFindFirstAttempt()
+        self.showBestGainWon()
+        self.showBestBetUse()
+        self.showNbLevelWon()
+
+    def showWorstStats(self) :
+        Scenario.messageWorstStats()
+        self.showWorstGainWon()
+        self.showWorstBetUse()
+        self.showNbLevelLose()
+
+    def showAverageStats(self) :
+        Scenario.messageAverageStats()
+        self.showAverageGainWon()
+        self.showAverageBetUse()
+        self.showAverageNbAttemptsByLevels()
+
+    def showBestStatLevelReached(self) :
+        bestLevel = 0
+        for level in self.level_history :
+            bestLevel = level.level if bestLevel < level.level else bestLevel
+        Scenario.messageBestStatLevelReached(bestLevel)
+
+    def showNbCoupFindFirstAttempt(self) :
+        nbCoupFindFirstAttempt = 0
+        for level in self.level_history :
+            if level.attempts == 1:
+                nbCoupFindFirstAttempt += 1
+        Scenario.messageNbCoupFindFirstAttempt(nbCoupFindFirstAttempt)
+
+    def showBestGainWon(self) :
+        bestGainWon = 0
+        for level in self.level_history :
+            bestGainWon = level.profit if bestGainWon < level.profit else bestGainWon
+        Scenario.messageGetBestGainWon(bestGainWon)
+
+    def showBestBetUse(self) :
+        bestBetUse = 0
+        for level in self.level_history :
+            bestBetUse = level.bet if bestBetUse < level.bet else bestBetUse
+        Scenario.messageGetBestBetUse(bestBetUse)
+
+    def showNbLevelWon(self) :
+        nbLevelWon = 0
+        for level in self.level_history :
+            if level.result == 1:
+                nbLevelWon += 1
+        Scenario.messageGetNbLevelWon(nbLevelWon)
+    
+    def showWorstGainWon(self) :
+        worstGainWon = self.level_history[0].profit
+        for level in self.level_history :
+            worstGainWon = level.profit if ((worstGainWon > level.profit) and (level.result == 1)) else worstGainWon
+        Scenario.messageGetWorstGainWon(worstGainWon)
+
+    def showWorstBetUse(self) :
+        worstBetUse = self.level_history[0].bet
+        for level in self.level_history :
+            worstBetUse = level.bet if worstBetUse > level.bet else worstBetUse
+        Scenario.messageGetWorstBetUse(worstBetUse)
+
+    def showNbLevelLose(self) :
+        nbLevelLose = 0
+        for level in self.level_history :
+            if level.result == 0:
+                nbLevelLose += 1
+        Scenario.messageGetNbLevelLose(nbLevelLose)
+    
+    def showAverageGainWon(self) :
+        averageGainWon = 0
+        for level in self.level_history :
+            averageGainWon += level.profit
+        averageGainWon = averageGainWon/len(self.level_history)
+        Scenario.messageGetAverageGainWon(averageGainWon)
+
+    def showAverageBetUse(self) :
+        averageBetUse = 0
+        for level in self.level_history :
+            averageBetUse += level.bet
+        averageBetUse = averageBetUse/len(self.level_history)
+        Scenario.messageGetAverageBetUse(averageBetUse)
+
+    def showAverageNbAttemptsByLevels(self) :
+        level_current = 1
+        while level_current <= len(self.list_level) :
+            self.showAverageNbAttemptsByLevel(level_current)
+            level_current += 1
+
+    def showAverageNbAttemptsByLevel(self, num_level) : 
+        nbAttempts = 0
+        nbLevel = 0
+        for level in self.level_history :
+            if ((level.level == num_level) and (level.result == 1))  :
+                nbLevel += 1
+                nbAttempts += level.attempts
+        if nbLevel != 0 :
+            nbAttempts = nbAttempts/nbLevel
+        Scenario.messageGetNbAttemptsByLevel(nbAttempts, num_level)

@@ -142,3 +142,77 @@ class Scenario :
     def nextLevel(level) :
         print("\t- Super ! Vous passez au Level {}.\n".format(str(level)))
 
+    @staticmethod
+    def messageAllStats(date) :
+        print("\t- Voici vos statistiques, depuis la 1è fois le "+str(date)+" :\n")
+
+    @staticmethod
+    def messageBestStats() :
+        print("\t\t- Vos meilleures statistiques :\n")
+
+    @staticmethod
+    def messageBestStatLevelReached(level) :
+        print("\t\t\t- Level le plus élevé atteint est "+str(level)+"\n")
+
+    @staticmethod
+    def messageNbCoupFindFirstAttempt(nb) :
+        print("\t\t\t- Vous avez réussi à trouver le bon nombre dès le 1è coup "+str(nb)+" fois.\n")
+
+    @staticmethod
+    def messageGetBestGainWon(nb) :
+        print("\t\t\t- Le gain le plus elevé est "+str(nb)+" €.\n")
+
+    @staticmethod
+    def messageGetBestBetUse(nb) :
+        print("\t\t\t- La mise la plus elevé est "+str(nb)+" €.\n")
+
+    @staticmethod
+    def messageGetNbLevelWon(nb) :
+        print("\t\t\t- Le nombre de manche gagné est de "+str(nb)+".\n")
+
+    @staticmethod
+    def messageWorstStats() :
+        print("\t\t- Vos pires statistiques :\n")
+
+    @staticmethod
+    def messageGetWorstGainWon(nb) :
+        print("\t\t\t- Le gain le plus bas est "+str(nb)+" €.\n")
+
+    @staticmethod
+    def messageGetWorstBetUse(nb) :
+        print("\t\t\t- La mise la plus basse est "+str(nb)+" €.\n")
+
+    @staticmethod
+    def messageGetNbLevelLose(nb) :
+        print("\t\t\t- Le nombre de manche perdu est de "+str(nb)+".\n")
+
+    @staticmethod
+    def messageAverageStats() :
+        print("\t\t- Vos moyennes :\n")
+
+    @staticmethod
+    def messageGetAverageGainWon(nb) :
+        print("\t\t\t- Le gain moyenne est de "+str(nb)+" €.\n")
+
+    @staticmethod
+    def messageGetAverageBetUse(nb) :
+        print("\t\t\t- La mise moyenne est de "+str(nb)+" €.\n")
+
+    @staticmethod
+    def messageGetNbAttemptsByLevel(nbAttempts, num_level) :
+        print("\t\t\t - Le nombre moyen de tentatives pour trouver le bon nombre au niveau {} est de {}.\n".format(str(num_level), str(nbAttempts)))
+        print("\t\t\t(on ne comptabilise le nombre de coups qu'en cas de réussite)\n")
+        
+
+
+
+        
+
+
+        
+
+
+        
+
+
+
