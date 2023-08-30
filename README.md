@@ -1,5 +1,7 @@
 # About
 
+> This is a student project
+
 This is a little terminal-based game written in Python, that allows to guess a random number with three attempts and bet some money over it.
 
 See picture for an illustration.
