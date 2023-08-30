@@ -1,3 +1,18 @@
+# About
+
+This is a little terminal-based game written in Python, that allows to guess a random number with three attempts and bet some money over it.
+
+See picture for an illustration.
+
+Stack :
+
+- Python3
+- SQLite
+- Singleton DB connector
+- No framework, all from scratch
+
+![](./images/game.png)
+
 # Equipe
 
 - Brandon Soret
@@ -7,22 +22,6 @@
 - Mouhamadou Soukouna
 - Narcice Duval
 - Vittorio Chillemi
-
-## groupes
-
-Groupe A :
-
-- Mouhamadou
-- Wissem
-- Vittorio
-
-Groupe B :
-- Sébastien
-- Narcisse
-
-Groupe C :
-- Brandon
-- Raïd
 
 # Choix techniques
 
